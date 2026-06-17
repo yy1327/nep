@@ -1,0 +1,16 @@
+package com.neusoft.nepm.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.neusoft.nepm.po.Supervisor;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+@Mapper
+public interface SupervisorMapper extends BaseMapper<Supervisor> {
+
+    @Select("SELECT * FROM supervisor WHERE supervisor_tel = #{tel}")
+    Supervisor getSupervisorByTel(String tel);
+
+    @Select("SELECT * FROM supervisor WHERE supervisor_tel = #{tel} AND supervisor_pwd = #{pwd}")
+    Supervisor getSupervisorByTelAndPwd(String tel, String pwd);
+}
