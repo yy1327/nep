@@ -9,7 +9,7 @@ router.beforeEach((to, from, next) => {
   const supervisor = sessionStorage.getItem('supervisor')
   if (['/selectGrid', '/selectAqi', '/feedbackList'].includes(to.path)) {
     if (!supervisor) {
-      router.push('/login')
+      return next('/login')
     }
   }
   next()

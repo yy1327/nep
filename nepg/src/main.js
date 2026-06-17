@@ -9,7 +9,7 @@ router.beforeEach((to, from, next) => {
   const gridMember = sessionStorage.getItem('gridMember')
   if (['/feedbackList', '/feedbackInfo'].includes(to.path)) {
     if (!gridMember) {
-      router.push('/login')
+      return next('/login')
     }
   }
   next()

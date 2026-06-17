@@ -15,6 +15,6 @@ public class AdminsServiceImpl extends ServiceImpl<AdminsMapper, Admins> impleme
         LambdaQueryWrapper<Admins> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Admins::getAdminCode, adminCode)
                .eq(Admins::getAdminPwd, adminPwd);
-        return getOne(wrapper);
+        return getOne(wrapper, false);
     }
 }

@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 @TableName("supervisor")
 public class Supervisor {
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.INPUT)
     private String supervisorId;
     private String supervisorTel;
     private String supervisorPwd;

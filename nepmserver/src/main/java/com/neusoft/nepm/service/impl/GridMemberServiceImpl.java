@@ -26,6 +26,6 @@ public class GridMemberServiceImpl extends ServiceImpl<GridMemberMapper, GridMem
         LambdaQueryWrapper<GridMember> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(GridMember::getGmCode, gmCode)
                .eq(GridMember::getGmPwd, gmPwd);
-        return getOne(wrapper);
+        return getOne(wrapper, false);
     }
 }
