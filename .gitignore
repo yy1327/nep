@@ -36,3 +36,7 @@ neps/dist/
 nepm/dist/
 nepg/dist/
 nepv/dist/
+
+# npm
+.npm-cache/
+.npmrc
