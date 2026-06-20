@@ -162,7 +162,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/nep_system?useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: ZHANGyan123w
+    password: 1234
 ```
 
 ---
