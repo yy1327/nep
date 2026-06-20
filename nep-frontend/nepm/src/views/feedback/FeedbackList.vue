@@ -51,7 +51,11 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="create_time" label="申报时间" width="170" sortable></el-table-column>
+        <el-table-column prop="create_time" label="申报时间" width="170" sortable>
+          <template #default="scope">
+            {{ formatTime(scope.row.create_time) }}
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="180" fixed="right">
           <template #default="scope">
             <el-button size="mini" type="primary" plain @click="viewInfo(scope.row.af_id)">📄 详情</el-button>
@@ -81,7 +85,7 @@ export default {
       tableData: [],
       searchForm: { afCode: "", supervisorName: "", afState: "", afAddress: "" },
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 5,
       total: 0,
       statusMap: { "01": "待指派", "02": "待确认", "03": "已完成" },
       statusTypeMap: { "01": "warning", "02": "", "03": "success" },
@@ -91,6 +95,12 @@ export default {
   created() { this.loadData() },
   activated() { this.loadData() },
   methods: {
+    formatTime(val) {
+      if (!val) return '-'
+      const d = new Date(val)
+      if (isNaN(d.getTime())) return val
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`
+    },
     async loadData() {
       const res = await api.post("/aqiFeedback/listAqiFeedbackPage", {
         pageNum: this.pageNum,
@@ -119,13 +129,21 @@ export default {
 </script>
 
 <style scoped>
-.feedback-page { padding: 20px; }
-.feedback-page h2 { font-size: 20px; color: #1b5e20; margin: 0 0 4px; }
-.page-desc { color: #999; font-size: 13px; margin-bottom: 16px; }
-.search-card { margin-bottom: 0; }
+.feedback-page { padding: 20px; animation: fadeInUp 0.4s ease-out; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.feedback-page h2 { font-size: 20px; color: #1b5e20; margin: 0 0 6px; font-weight: 700; line-height: 1.4; }
+.page-desc { color: #999; font-size: 13px; margin-bottom: 18px; line-height: 1.5; }
+.search-card { margin-bottom: 0; border-radius: 12px; }
 .search-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-.code-cell { font-weight: 600; color: #333; }
-.supervisor-cell { display: flex; align-items: center; gap: 6px; }
+.code-cell { font-weight: 700; color: #333; }
+.supervisor-cell { display: flex; align-items: center; gap: 8px; }
 .supervisor-icon { font-size: 16px; }
 .aqi-tag { font-weight: 600; color: #e6a23c; }
+
+:deep(.el-table) { font-size: 14px; }
+:deep(.el-table .cell) { line-height: 1.6; padding: 10px 12px; }
+:deep(.el-table th .cell) { font-weight: 600; color: #333; }
 </style>

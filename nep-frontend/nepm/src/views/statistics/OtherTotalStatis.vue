@@ -155,8 +155,8 @@ export default {
 <style scoped>
 .statis-page { padding: 20px; }
 .page-header { margin-bottom: 20px; }
-.page-header h2 { font-size: 20px; color: #1b5e20; margin: 0 0 6px; }
-.page-sub { color: #999; font-size: 13px; }
+.page-header h2 { font-size: 20px; color: #1b5e20; margin: 0 0 6px; font-weight: 700; line-height: 1.4; }
+.page-sub { color: #999; font-size: 13px; line-height: 1.5; }
 
 /* KPI 圆环卡片 */
 .kpi-row { display: flex; gap: 16px; margin-bottom: 16px; }
@@ -174,19 +174,19 @@ export default {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
 }
-.kpi-val { font-size: 22px; font-weight: 700; }
-.kpi-label { font-size: 14px; color: #333; font-weight: 600; }
-.kpi-sub { font-size: 12px; color: #999; margin-top: 2px; }
+.kpi-val { font-size: 22px; font-weight: 700; line-height: 1.2; }
+.kpi-label { font-size: 14px; color: #333; font-weight: 600; margin-top: 6px; }
+.kpi-sub { font-size: 12px; color: #999; margin-top: 4px; }
 
 /* 数据卡片 */
 .data-cards { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
 .data-card { flex: 1; min-width: 200px; }
-.big-num { font-size: 42px; font-weight: 700; text-align: center; margin: 10px 0; }
+.big-num { font-size: 42px; font-weight: 700; text-align: center; margin: 12px 0; line-height: 1.2; }
 .big-num.blue { color: #409eff; }
 .big-num.green { color: #67c23a; }
 .big-num.orange { color: #e6a23c; }
 .big-num.purple { color: #6f42c1; }
-.big-desc { text-align: center; color: #999; font-size: 12px; margin-top: 6px; }
+.big-desc { text-align: center; color: #999; font-size: 12px; margin-top: 8px; line-height: 1.5; }
 
 /* 仪表盘 */
 .gauge-row { display: flex; gap: 16px; margin-top: 16px; }

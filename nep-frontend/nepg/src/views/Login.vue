@@ -187,7 +187,7 @@ export default {
   flex: 1;
   background: linear-gradient(160deg, #134e42 0%, #0d332d 50%, #166953 100%);
   position: relative;
-  padding: 44px 36px;
+  padding: 48px 40px;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -232,15 +232,17 @@ export default {
   font-size: 22px; font-weight: 700;
   color: #c8f7dc;
   letter-spacing: 2px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  line-height: 1.4;
 }
 .brand-desc {
   font-size: 13px; color: #5ab895;
   letter-spacing: 1px;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
+  line-height: 1.5;
 }
-.brand-features { display: flex; flex-direction: column; gap: 14px; }
-.feature-item { display: flex; align-items: flex-start; gap: 12px; }
+.brand-features { display: flex; flex-direction: column; gap: 16px; }
+.feature-item { display: flex; align-items: flex-start; gap: 14px; }
 .feature-hex {
   width: 36px; height: 36px;
   background: rgba(56, 239, 125, 0.1);
@@ -249,32 +251,33 @@ export default {
   display: flex; align-items: center; justify-content: center;
   font-size: 16px; flex-shrink: 0;
 }
-.feature-text { display: flex; flex-direction: column; gap: 2px; }
-.feature-text strong { font-size: 13px; color: #c8f7dc; }
-.feature-text span { font-size: 11px; color: #5ab895; }
+.feature-text { display: flex; flex-direction: column; gap: 3px; }
+.feature-text strong { font-size: 13px; color: #c8f7dc; line-height: 1.4; }
+.feature-text span { font-size: 11px; color: #5ab895; line-height: 1.4; }
 
 /* ========== 右侧表单区 ========== */
 .card-form {
   flex: 1;
-  padding: 50px 40px;
+  padding: 52px 44px;
   display: flex; flex-direction: column; justify-content: center;
 }
-.form-header { margin-bottom: 32px; }
+.form-header { margin-bottom: 36px; }
 .form-header h2 {
   font-size: 22px; font-weight: 700;
   color: #c8f7dc;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   letter-spacing: 2px;
 }
 .form-header p {
   font-size: 13px; color: #5ab895;
+  line-height: 1.5;
 }
 .login-form { width: 100%; }
 
 /* ========== 输入框 ========== */
 .input-group {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 .input-icon {
   position: absolute;
@@ -285,7 +288,7 @@ export default {
 .input-group:focus-within .input-icon { opacity: 1; }
 .input-field {
   width: 100%;
-  padding: 14px 14px 14px 44px;
+  padding: 15px 15px 15px 46px;
   border: 2px solid rgba(56, 239, 125, 0.2);
   border-radius: 10px;
   font-size: 15px;
@@ -293,6 +296,7 @@ export default {
   background: rgba(56, 239, 125, 0.05);
   transition: all 0.3s;
   box-sizing: border-box;
+  line-height: 1.4;
 }
 .input-field::placeholder { color: #3d7a65; }
 .input-field:focus {
@@ -305,7 +309,7 @@ export default {
 /* ========== 按钮 ========== */
 .login-btn {
   width: 100%;
-  padding: 14px;
+  padding: 15px;
   background: linear-gradient(135deg, #11998e, #0d7370);
   color: #fff;
   border: none;
@@ -320,7 +324,8 @@ export default {
   letter-spacing: 6px;
   transition: all 0.3s;
   box-shadow: 0 4px 14px rgba(17, 153, 142, 0.3);
-  margin-top: 8px;
+  margin-top: 10px;
+  line-height: 1.4;
 }
 .login-btn:hover {
   transform: translateY(-2px);
@@ -342,6 +347,7 @@ export default {
   font-size: 12px;
   letter-spacing: 1px;
   z-index: 1;
+  line-height: 1.5;
 }
 
 /* ========== 响应式 ========== */
@@ -349,9 +355,17 @@ export default {
   .grid-login-card {
     width: 92%;
     flex-direction: column;
+    min-height: auto;
   }
   .card-brand { padding: 30px 24px; }
   .brand-features { display: none; }
   .card-form { padding: 30px 28px; }
+  .grid-footer { position: relative; margin-top: 20px; }
+}
+@media (max-width: 480px) {
+  .grid-login-card { width: 96%; border-radius: 12px; }
+  .brand-title { font-size: 18px; }
+  .form-header h2 { font-size: 18px; }
+  .login-btn { padding: 12px; font-size: 15px; letter-spacing: 3px; }
 }
 </style>

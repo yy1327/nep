@@ -1,19 +1,23 @@
 <template>
   <div class="assign-feedback">
-    <el-card>
+    <div class="page-header">
+      <h2>👷 指派网格员</h2>
+      <span class="page-sub">为该反馈指派合适的网格员进行实地检测</span>
+    </div>
+    <el-card class="assign-card">
       <template #header>
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <span>指派反馈</span>
-          <el-button @click="goBack">返回</el-button>
+          <span class="card-title">指派信息</span>
+          <el-button @click="goBack" type="primary" plain>← 返回列表</el-button>
         </div>
       </template>
-      <el-form :model="form" label-width="100px">
+      <el-form :model="form" label-width="100px" size="large">
         <el-form-item label="省份">
-          <!-- 修改点1: 省份改变时，加载城市列表，并清空已选的城市和网格员 -->
           <el-select
             v-model="form.provinceId"
             @change="handleProvinceChange"
             placeholder="请选择省份"
+            style="width:100%"
           >
             <el-option
               v-for="p in provinces"
@@ -24,11 +28,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="城市">
-          <!-- 修改点2: 城市改变时，加载网格员列表 -->
           <el-select
             v-model="form.cityId"
             @change="loadGridMembers"
             placeholder="请选择城市"
+            style="width:100%"
           >
             <el-option
               v-for="c in cities"
@@ -39,7 +43,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="网格员">
-          <el-select v-model="form.gmId" placeholder="请选择网格员">
+          <el-select v-model="form.gmId" placeholder="请选择网格员" style="width:100%">
             <el-option
               v-for="g in gridMembers"
               :key="g.gmId"
@@ -52,12 +56,13 @@
           <el-input
             v-model="form.desc"
             type="textarea"
+            :rows="3"
             placeholder="请输入指派备注"
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitAssign">确认指派</el-button>
-          <el-button @click="goBack">取消</el-button>
+          <el-button type="primary" @click="submitAssign" size="large">确认指派</el-button>
+          <el-button @click="goBack" size="large">取消</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -92,14 +97,10 @@ export default {
         this.provinces = res.data;
       }
     },
-    // 新增/修改：处理省份变化
     handleProvinceChange() {
-      // 1. 清空之前选择的城市和网格员，避免数据不一致
       this.form.cityId = "";
       this.form.gmId = "";
       this.gridMembers = [];
-
-      // 2. 加载城市列表
       this.loadCities();
     },
     async loadCities() {
@@ -132,7 +133,6 @@ export default {
       }
     },
     async submitAssign() {
-      // ... 原有逻辑不变
       const afId = this.$route.params.id;
       const res = await api.post("/aqiFeedback/updateAqiFeedbackAssign", {
         afId: parseInt(afId),
@@ -152,3 +152,16 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.assign-feedback { padding: 20px; animation: fadeInUp 0.4s ease-out; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page-header { margin-bottom: 20px; }
+.page-header h2 { font-size: 20px; color: #1b5e20; margin: 0 0 6px; font-weight: 700; line-height: 1.4; }
+.page-sub { color: #999; font-size: 13px; line-height: 1.5; }
+.assign-card { border-radius: 12px; }
+.card-title { font-size: 16px; font-weight: 600; color: #333; }
+</style>

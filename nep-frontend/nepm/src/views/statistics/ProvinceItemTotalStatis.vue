@@ -177,21 +177,23 @@ export default {
 <style scoped>
 .statis-page { padding: 20px; }
 .page-header { margin-bottom: 20px; }
-.page-header h2 { font-size: 20px; color: #1b5e20; margin: 0 0 6px; }
-.page-sub { color: #999; font-size: 13px; }
+.page-header h2 { font-size: 20px; color: #1b5e20; margin: 0 0 6px; font-weight: 700; line-height: 1.4; }
+.page-sub { color: #999; font-size: 13px; line-height: 1.5; }
 .summary-row { display: flex; gap: 16px; margin-bottom: 16px; }
 .summary-card {
   flex: 1; display: flex; align-items: center; gap: 14px;
-  background: #fff; border-radius: 10px; padding: 18px 20px;
+  background: #fff; border-radius: 10px; padding: 20px 22px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-left: 4px solid;
+  transition: all 0.3s ease;
 }
+.summary-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
 .summary-card.blue { border-color: #409eff; }
 .summary-card.green { border-color: #67c23a; }
 .summary-card.red { border-color: #f56c6c; }
 .summary-card.orange { border-color: #e6a23c; }
 .sc-icon { font-size: 28px; }
-.sc-val { font-size: 26px; font-weight: 700; color: #333; }
-.sc-label { font-size: 12px; color: #999; margin-top: 2px; }
-.chart-card { margin-bottom: 16px; }
-.chart-box { width: 100%; height: 400px; }
+.sc-val { font-size: 26px; font-weight: 700; color: #333; line-height: 1.2; }
+.sc-label { font-size: 12px; color: #999; margin-top: 4px; }
+.chart-card { margin-bottom: 16px; border-radius: 12px; }
+.chart-box { width: 100%; height: 420px; }
 </style>

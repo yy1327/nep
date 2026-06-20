@@ -140,7 +140,7 @@
                 <div class="fb-row"><span class="fb-label">地址：</span>{{ item.af_address }}</div>
                 <div class="fb-row"><span class="fb-label">描述：</span>{{ item.af_desc }}</div>
               </div>
-              <div class="fb-footer">🕐 {{ item.create_time }}</div>
+              <div class="fb-footer">🕐 {{ formatTime(item.create_time) }}</div>
             </div>
           </div>
         </div>
@@ -286,6 +286,12 @@ export default {
     this.loadFeedbackList();
   },
   methods: {
+    formatTime(val) {
+      if (!val) return '-'
+      const d = new Date(val)
+      if (isNaN(d.getTime())) return val
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`
+    },
     loadUserInfo() {
       const raw = sessionStorage.getItem("supervisor");
       if (raw) {
@@ -509,9 +515,9 @@ export default {
   font-weight: 600;
 }
 .menu-icon { font-size: 20px; }
-.menu-text { display: flex; flex-direction: column; gap: 2px; }
-.menu-label { font-size: 14px; }
-.menu-desc { font-size: 11px; color: #aaa; }
+.menu-text { display: flex; flex-direction: column; gap: 3px; }
+.menu-label { font-size: 14px; line-height: 1.3; }
+.menu-desc { font-size: 11px; color: #aaa; line-height: 1.3; }
 .menu-item.active .menu-desc { color: #81c784; }
 .menu-arrow { margin-left: auto; color: #43a047; font-size: 14px; }
 
@@ -538,10 +544,12 @@ export default {
 .card-title {
   font-size: 20px; font-weight: 700;
   color: #1b5e20;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  line-height: 1.4;
 }
 .card-hint {
-  color: #999; font-size: 13px; margin-bottom: 24px;
+  color: #999; font-size: 13px; margin-bottom: 28px;
+  line-height: 1.5;
 }
 .card-title-row {
   display: flex; justify-content: space-between; align-items: center;
@@ -549,10 +557,10 @@ export default {
 }
 
 /* ========== 表单 ========== */
-.form-item { margin-bottom: 18px; }
+.form-item { margin-bottom: 20px; }
 .form-item label {
-  display: block; margin-bottom: 6px;
-  font-weight: 600; color: #555; font-size: 14px;
+  display: block; margin-bottom: 8px;
+  font-weight: 600; color: #555; font-size: 14px; line-height: 1.4;
 }
 .form-item input,
 .form-item select,
@@ -579,7 +587,7 @@ export default {
 
 /* ========== 按钮 ========== */
 .btn-primary {
-  width: 100%; padding: 13px;
+  width: 100%; padding: 14px;
   background: linear-gradient(135deg, #43a047, #2e7d32);
   color: #fff;
   border: none; border-radius: 8px;
@@ -588,6 +596,7 @@ export default {
   transition: all 0.2s;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   box-shadow: 0 2px 8px rgba(46, 125, 50, 0.2);
+  line-height: 1.4;
 }
 .btn-primary:hover {
   transform: translateY(-1px);
@@ -634,8 +643,8 @@ export default {
 .status-02 { background: #e3f2fd; color: #1565c0; }
 .status-03 { background: #e8f5e9; color: #2e7d32; }
 .fb-body { margin-bottom: 12px; }
-.fb-row { margin: 6px 0; color: #555; font-size: 14px; }
-.fb-label { color: #388e3c; font-weight: 600; }
+.fb-row { margin: 7px 0; color: #555; font-size: 14px; line-height: 1.6; }
+.fb-label { color: #388e3c; font-weight: 600; margin-right: 4px; }
 .fb-footer {
   padding-top: 12px; border-top: 1px solid #e8f5e9;
   color: #999; font-size: 12px;
@@ -650,24 +659,55 @@ export default {
 }
 .knowledge-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
 .kn-color-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; opacity: 0.25; }
-.kn-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-.kn-badge { color: #fff; padding: 2px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-.kn-name { font-size: 17px; font-weight: 700; color: #333; }
+.kn-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.kn-badge { color: #fff; padding: 3px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.kn-name { font-size: 17px; font-weight: 700; color: #333; line-height: 1.3; }
 .kn-range { margin-left: auto; font-size: 13px; color: #999; }
 .kn-desc {
-  color: #555; font-size: 14px; margin-bottom: 12px;
-  padding: 10px 14px; background: #f1f8e9; border-radius: 8px; line-height: 1.6;
+  color: #555; font-size: 14px; margin-bottom: 14px;
+  padding: 12px 16px; background: #f1f8e9; border-radius: 8px; line-height: 1.7;
 }
-.kn-details { display: flex; flex-direction: column; gap: 6px; }
-.kn-detail-item { font-size: 13px; color: #666; line-height: 1.5; display: flex; gap: 8px; }
+.kn-details { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.kn-detail-item { font-size: 13px; color: #666; line-height: 1.6; display: flex; gap: 8px; }
 .kn-detail-label { font-weight: 600; color: #388e3c; white-space: nowrap; }
 
 /* ========== 底部 ========== */
 .footer {
-  text-align: center; padding: 14px;
+  text-align: center; padding: 16px;
   color: #a5d6a7; font-size: 12px;
   border-top: 1px solid #e8f5e9;
   background: #fff;
   letter-spacing: 1px;
+  line-height: 1.5;
+}
+
+/* ========== 移动端适配 ========== */
+@media (max-width: 768px) {
+  .topbar-center { display: none; }
+  .topbar { padding: 0 16px; }
+  .body-wrap { flex-direction: column; }
+  .sidebar {
+    width: 100%; border-right: none;
+    border-bottom: 1px solid #c8e6c9;
+    padding: 0;
+    display: flex; overflow-x: auto;
+  }
+  .sidebar-header { display: none; }
+  .menu-item {
+    flex-direction: column; gap: 2px;
+    padding: 10px 14px; border-left: none;
+    border-bottom: 3px solid transparent;
+    min-width: 80px; text-align: center;
+  }
+  .menu-item.active { border-left: none; border-bottom-color: #43a047; }
+  .menu-text { align-items: center; }
+  .menu-desc { display: none; }
+  .menu-arrow { display: none; }
+  .nature-strip { display: none; }
+  .content { padding: 16px; }
+  .tab-panel { max-width: 100%; }
+  .card { padding: 20px; border-radius: 12px; }
+  .form-row { flex-direction: column; gap: 0; }
+  .knowledge-card .kn-details { flex-direction: column; }
 }
 </style>

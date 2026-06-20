@@ -21,7 +21,7 @@
           <div class="info-row"><span class="info-label">检测备注：</span>{{ item.af_confirm_desc || '-' }}</div>
         </div>
         <div class="item-footer">
-          <span>🕐 确认时间：{{ item.af_confirm_time || '-' }}</span>
+          <span>🕐 确认时间：{{ formatTime(item.af_confirm_time) }}</span>
         </div>
       </div>
     </div>
@@ -41,6 +41,12 @@ export default {
   },
   created() { this.loadData() },
   methods: {
+    formatTime(val) {
+      if (!val) return '-'
+      const d = new Date(val)
+      if (isNaN(d.getTime())) return val
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`
+    },
     async loadData() {
       const gm = JSON.parse(sessionStorage.getItem('gridMember'))
       if (!gm) return
@@ -54,22 +60,50 @@ export default {
 </script>
 
 <style scoped>
-.history-page { max-width: 800px; }
-h2 { font-size: 18px; color: #166953; margin-bottom: 16px; }
-.empty { text-align: center; padding: 60px; color: #999; background: #fff; border-radius: 12px; }
-.empty-icon { font-size: 48px; display: block; margin-bottom: 10px; }
-.list { display: flex; flex-direction: column; gap: 12px; }
-.item-card {
-  background: #fff; border-radius: 12px; padding: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-  border-left: 4px solid #67c23a;
+.history-page {
+  max-width: 800px;
+  animation: fadeInUp 0.4s ease-out;
 }
-.item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.item-code { font-weight: 600; color: #166953; font-size: 15px; }
-.item-badge { background: #e8f5e9; color: #388e3c; padding: 2px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-.item-body { margin-bottom: 12px; }
-.info-row { margin: 6px 0; color: #555; font-size: 14px; }
-.info-label { color: #11998e; font-weight: 600; }
-.aqi-val { font-weight: 700; color: #e6a23c; font-size: 16px; }
-.item-footer { padding-top: 10px; border-top: 1px solid #e8f5ec; color: #999; font-size: 12px; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+h2 { font-size: 20px; color: #166953; margin-bottom: 20px; font-weight: 700; line-height: 1.4; }
+.empty {
+  text-align: center; padding: 64px 20px; color: #999;
+  background: #fff; border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.empty-icon { font-size: 52px; display: block; margin-bottom: 12px; }
+.list { display: flex; flex-direction: column; gap: 14px; }
+.item-card {
+  background: #fff; border-radius: 14px; padding: 22px 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  border-left: 4px solid #67c23a;
+  transition: all 0.3s ease;
+}
+.item-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+}
+.item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.item-code { font-weight: 700; color: #166953; font-size: 15px; letter-spacing: 0.3px; }
+.item-badge {
+  background: #e8f5e9; color: #2e7d32;
+  padding: 4px 14px; border-radius: 20px;
+  font-size: 12px; font-weight: 600;
+}
+.item-body { margin-bottom: 14px; }
+.info-row { margin: 9px 0; color: #555; font-size: 14px; line-height: 1.7; }
+.info-label { color: #11998e; font-weight: 600; margin-right: 4px; }
+.aqi-val { font-weight: 700; color: #e6a23c; font-size: 16px; line-height: 1.4; }
+.item-footer {
+  padding-top: 12px; border-top: 1px solid #e8f5ec;
+  color: #999; font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  .history-page { max-width: 100%; }
+  .item-card { padding: 16px; }
+}
 </style>

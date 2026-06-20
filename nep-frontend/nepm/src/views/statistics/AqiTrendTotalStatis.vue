@@ -204,14 +204,16 @@ export default {
 <style scoped>
 .statis-page { padding: 20px; }
 .page-header { margin-bottom: 20px; }
-.page-header h2 { font-size: 20px; color: #1b5e20; margin: 0 0 6px; }
-.page-sub { color: #999; font-size: 13px; }
+.page-header h2 { font-size: 20px; color: #1b5e20; margin: 0 0 6px; font-weight: 700; line-height: 1.4; }
+.page-sub { color: #999; font-size: 13px; line-height: 1.5; }
 .trend-summary { display: flex; gap: 16px; margin-bottom: 16px; }
 .trend-card {
-  flex: 1; background: #fff; border-radius: 10px; padding: 16px 20px;
+  flex: 1; background: #fff; border-radius: 10px; padding: 18px 22px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05); text-align: center;
+  transition: all 0.3s ease;
 }
-.tr-label { font-size: 12px; color: #999; display: block; margin-bottom: 6px; }
-.tr-value { font-size: 24px; font-weight: 700; }
-.chart-box-tall { width: 100%; height: 380px; }
+.trend-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
+.tr-label { font-size: 12px; color: #999; display: block; margin-bottom: 8px; }
+.tr-value { font-size: 24px; font-weight: 700; line-height: 1.2; }
+.chart-box-tall { width: 100%; height: 400px; }
 </style>

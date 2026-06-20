@@ -158,7 +158,7 @@ export default {
 /* ========== 卡片头部 ========== */
 .card-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 36px;
 }
 .logo-circle {
   width: 72px; height: 72px;
@@ -180,12 +180,14 @@ export default {
   font-weight: 700;
   color: #1b5e20;
   letter-spacing: 2px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  line-height: 1.4;
 }
 .app-subtitle {
   font-size: 13px;
   color: #81c784;
   letter-spacing: 3px;
+  line-height: 1.5;
 }
 
 /* ========== 输入框 ========== */
@@ -194,7 +196,7 @@ export default {
 }
 .input-group {
   position: relative;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
 }
 .input-icon {
   position: absolute;
@@ -211,7 +213,7 @@ export default {
 }
 .input-field {
   width: 100%;
-  padding: 14px 14px 14px 44px;
+  padding: 15px 15px 15px 46px;
   border: 2px solid #dcedc8;
   border-radius: 10px;
   font-size: 15px;
@@ -219,6 +221,7 @@ export default {
   background: #f9fdf7;
   transition: all 0.3s;
   box-sizing: border-box;
+  line-height: 1.4;
 }
 .input-field::placeholder {
   color: #bbb;
@@ -233,7 +236,7 @@ export default {
 /* ========== 登录按钮 ========== */
 .login-btn {
   width: 100%;
-  padding: 14px;
+  padding: 15px;
   background: linear-gradient(135deg, #43a047, #2e7d32);
   color: #fff;
   border: none;
@@ -248,7 +251,8 @@ export default {
   letter-spacing: 6px;
   transition: all 0.3s;
   box-shadow: 0 4px 14px rgba(46, 125, 50, 0.25);
-  margin-top: 6px;
+  margin-top: 8px;
+  line-height: 1.4;
 }
 .login-btn:hover {
   transform: translateY(-2px);
@@ -268,12 +272,13 @@ export default {
 /* ========== 底部链接 ========== */
 .card-footer {
   text-align: center;
-  padding-top: 16px;
+  padding-top: 18px;
   border-top: 1px solid #e8f5e9;
 }
 .footer-text {
   color: #999;
   font-size: 14px;
+  line-height: 1.5;
 }
 .register-link {
   color: #43a047;
@@ -296,5 +301,18 @@ export default {
   font-size: 12px;
   letter-spacing: 1px;
   z-index: 1;
+  line-height: 1.5;
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 480px) {
+  .login-card {
+    width: 92%;
+    padding: 32px 24px 24px;
+    border-radius: 16px;
+  }
+  .logo-circle { width: 60px; height: 60px; font-size: 30px; }
+  .app-title { font-size: 20px; }
+  .login-btn { padding: 12px; font-size: 15px; letter-spacing: 3px; }
 }
 </style>

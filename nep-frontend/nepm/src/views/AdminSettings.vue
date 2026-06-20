@@ -186,20 +186,32 @@ export default {
 </script>
 
 <style scoped>
-.settings-page { padding: 20px; max-width: 900px; }
+.settings-page { padding: 20px; max-width: 900px; animation: fadeInUp 0.4s ease-out; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 .page-header { margin-bottom: 20px; }
-.page-header h2 { font-size: 20px; color: #1b5e20; margin: 0 0 6px; }
-.page-sub { color: #999; font-size: 13px; }
+.page-header h2 { font-size: 20px; color: #1b5e20; margin: 0 0 6px; font-weight: 700; line-height: 1.4; }
+.page-sub { color: #999; font-size: 13px; line-height: 1.5; }
 
 .settings-row { display: flex; gap: 16px; margin-bottom: 16px; }
-.settings-card { flex: 1; }
+.settings-card { flex: 1; border-radius: 12px; }
 .card-header { font-size: 15px; font-weight: 600; color: #333; }
 
-.system-card { margin-top: 0; }
+:deep(.el-form-item__label) { line-height: 1.6; padding-bottom: 4px !important; }
+:deep(.el-form-item) { margin-bottom: 20px; }
+
+.system-card { margin-top: 0; border-radius: 12px; }
 .system-info { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.info-item { display: flex; flex-direction: column; gap: 4px; padding: 12px 16px; background: #f9fdf7; border-radius: 8px; }
-.info-label { font-size: 12px; color: #999; }
-.info-value { font-size: 14px; color: #333; font-weight: 500; }
+.info-item {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 16px 20px; background: #f9fdf7; border-radius: 10px;
+  transition: all 0.2s ease;
+}
+.info-item:hover { background: #e8f5e9; }
+.info-label { font-size: 12px; color: #999; line-height: 1.4; }
+.info-value { font-size: 14px; color: #333; font-weight: 500; line-height: 1.5; }
 
 /* Element UI 输入框美化 */
 :deep(.el-input__inner) {
@@ -209,11 +221,25 @@ export default {
   background: linear-gradient(135deg, #43a047, #2e7d32) !important;
   border: none !important;
   border-radius: 8px;
+  font-weight: 600;
+}
+:deep(.el-button--primary:hover) {
+  background: linear-gradient(135deg, #66bb6a, #43a047) !important;
 }
 :deep(.el-button--warning) {
   background: linear-gradient(135deg, #e6a23c, #d48806) !important;
   border: none !important;
   border-radius: 8px;
   color: #fff !important;
+  font-weight: 600;
+}
+:deep(.el-button--warning:hover) {
+  background: linear-gradient(135deg, #f0b955, #e6a23c) !important;
+}
+
+@media (max-width: 768px) {
+  .settings-page { max-width: 100%; }
+  .settings-row { flex-direction: column; }
+  .system-info { grid-template-columns: 1fr; }
 }
 </style>

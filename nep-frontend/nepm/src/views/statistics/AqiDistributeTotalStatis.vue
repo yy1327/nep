@@ -151,9 +151,9 @@ export default {
 <style scoped>
 .statis-page { padding: 20px; }
 .page-header { margin-bottom: 20px; }
-.page-header h2 { font-size: 20px; color: #1b5e20; margin: 0 0 6px; }
-.page-sub { color: #999; font-size: 13px; }
+.page-header h2 { font-size: 20px; color: #1b5e20; margin: 0 0 6px; font-weight: 700; line-height: 1.4; }
+.page-sub { color: #999; font-size: 13px; line-height: 1.5; }
 .chart-row { display: flex; gap: 16px; }
-.half-card { flex: 1; }
-.chart-box-half { width: 100%; height: 320px; }
+.half-card { flex: 1; border-radius: 12px; }
+.chart-box-half { width: 100%; height: 340px; }
 </style>

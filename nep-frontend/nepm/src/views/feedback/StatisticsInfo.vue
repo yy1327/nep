@@ -1,10 +1,14 @@
 <template>
   <div class="statistics-info">
-    <el-card>
+    <div class="page-header">
+      <h2>📊 统计详情</h2>
+      <span class="page-sub">查看空气质量监测数据的详细信息</span>
+    </div>
+    <el-card class="info-card">
       <template #header>
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <span>统计详情</span>
-          <el-button @click="goBack">返回</el-button>
+          <span class="card-title">统计ID：{{ detail.statisticsId }}</span>
+          <el-button @click="goBack" type="primary" plain>← 返回列表</el-button>
         </div>
       </template>
       <el-descriptions :column="2" border>
@@ -36,7 +40,7 @@
           >{{ detail.o3Value }} μg/m³</el-descriptions-item
         >
         <el-descriptions-item label="统计日期">{{
-          detail.statisticsDate
+          formatDate(detail.statisticsDate)
         }}</el-descriptions-item>
       </el-descriptions>
     </el-card>
@@ -57,6 +61,12 @@ export default {
     this.loadDetail();
   },
   methods: {
+    formatDate(val) {
+      if (!val) return '-'
+      const d = new Date(val)
+      if (isNaN(d.getTime())) return val
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
+    },
     async loadDetail() {
       const id = this.$route.params.id;
       const res = await api.post("/statistics/getStatisticsById", {
@@ -72,3 +82,20 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.statistics-info { padding: 20px; animation: fadeInUp 0.4s ease-out; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page-header { margin-bottom: 20px; }
+.page-header h2 { font-size: 20px; color: #1b5e20; margin: 0 0 6px; font-weight: 700; line-height: 1.4; }
+.page-sub { color: #999; font-size: 13px; line-height: 1.5; }
+.info-card { border-radius: 12px; }
+.card-title { font-size: 16px; font-weight: 600; color: #333; }
+
+:deep(.el-descriptions) { font-size: 14px; }
+:deep(.el-descriptions__label) { font-weight: 600; color: #555; }
+:deep(.el-descriptions__content) { color: #333; line-height: 1.6; }
+</style>

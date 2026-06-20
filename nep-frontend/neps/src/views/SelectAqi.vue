@@ -143,102 +143,142 @@ export default {
 <style scoped>
 .select-aqi-container {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: linear-gradient(180deg, #e8f5e9 0%, #f1f8e9 30%, #f0fdf4 100%);
 }
 .header {
-  background: #667eea;
+  background: linear-gradient(135deg, #1b5e20, #2e7d32, #388e3c);
   color: white;
-  padding: 20px;
+  padding: 20px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 2px 12px rgba(0,80,20,0.2);
 }
+.header h2 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: 1px; }
 .logout-btn {
-  background: transparent;
+  background: rgba(255,255,255,0.15);
   color: white;
-  border: 1px solid white;
-  padding: 8px 16px;
-  border-radius: 5px;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 8px 20px;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
 }
+.logout-btn:hover { background: rgba(255,255,255,0.3); }
 .content {
   max-width: 600px;
   margin: 30px auto;
   background: white;
   padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,80,20,0.08);
+  animation: fadeInUp 0.4s ease-out;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  color: #333;
-  font-weight: 500;
+  color: #555;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.4;
 }
 .form-group input,
 .form-group select,
 .form-group textarea {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  padding: 12px 14px;
+  border: 1.5px solid #dcedc8;
+  border-radius: 10px;
   font-size: 14px;
+  color: #333;
+  background: #f9fdf7;
+  transition: all 0.25s ease;
+  box-sizing: border-box;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #66bb6a;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(102,187,106,0.1);
 }
 .form-group textarea {
-  height: 100px;
+  min-height: 100px;
   resize: vertical;
 }
 .form-row {
   display: flex;
-  gap: 15px;
+  gap: 16px;
 }
 .form-row .form-group {
   flex: 1;
 }
 .submit-btn {
   width: 100%;
-  padding: 12px;
-  background: #667eea;
+  padding: 14px;
+  background: linear-gradient(135deg, #43a047, #2e7d32);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(46,125,50,0.25);
+  letter-spacing: 1px;
+  line-height: 1.4;
 }
 .submit-btn:hover {
-  background: #556cd6;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(46,125,50,0.35);
 }
-/* 【新增】返回按钮样式 */
 .back-btn {
   width: 100%;
-  padding: 12px;
+  padding: 13px;
   background: #fff;
   color: #666;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
+  border: 1.5px solid #dcedc8;
+  border-radius: 10px;
+  font-size: 15px;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
+  transition: all 0.2s;
+  line-height: 1.4;
 }
 .back-btn:hover {
-  background: #f9f9f9;
-  border-color: #999;
+  background: #f1f8e9;
+  border-color: #a5d6a7;
+  color: #2e7d32;
 }
 .history-btn {
   width: 100%;
-  padding: 12px;
+  padding: 13px;
   background: #fff;
-  color: #667eea;
-  border: 1px solid #667eea;
-  border-radius: 5px;
-  font-size: 16px;
+  color: #43a047;
+  border: 1.5px solid #a5d6a7;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s;
+  line-height: 1.4;
 }
 .history-btn:hover {
-  background: #f5f5f5;
+  background: #e8f5e9;
+}
+
+@media (max-width: 768px) {
+  .content { margin: 16px; padding: 24px 20px; }
+  .form-row { flex-direction: column; gap: 0; }
 }
 </style>

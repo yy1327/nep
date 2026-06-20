@@ -105,40 +105,82 @@ export default {
 </script>
 
 <style scoped>
-.settings-page { max-width: 800px; }
-h2 { font-size: 18px; color: #166953; margin-bottom: 16px; }
-.settings-row { display: flex; gap: 16px; margin-bottom: 16px; }
+.settings-page {
+  max-width: 800px;
+  animation: fadeInUp 0.4s ease-out;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+h2 { font-size: 20px; color: #166953; margin-bottom: 20px; font-weight: 700; line-height: 1.4; }
+.settings-row { display: flex; gap: 18px; margin-bottom: 18px; }
 .card {
-  flex: 1; background: #fff; border-radius: 12px;
-  padding: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  flex: 1; background: #fff; border-radius: 14px;
+  padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.05);
   border-top: 4px solid #11998e;
+  transition: all 0.3s ease;
 }
-.card h3 { font-size: 16px; color: #166953; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #e8f5ec; }
-.form-item { margin-bottom: 14px; }
-.form-item label { display: block; font-size: 13px; color: #666; font-weight: 600; margin-bottom: 4px; }
+.card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+.card h3 {
+  font-size: 16px; color: #166953; margin-bottom: 20px;
+  padding-bottom: 14px; border-bottom: 1px solid #e8f5ec;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.form-item { margin-bottom: 18px; }
+.form-item label {
+  display: block; font-size: 13px; color: #666;
+  font-weight: 600; margin-bottom: 8px; line-height: 1.4;
+}
 .form-item input {
-  width: 100%; padding: 10px 12px; border: 1.5px solid #d4ede3;
-  border-radius: 8px; font-size: 14px; color: #333;
-  transition: all 0.2s; background: #f9fdf7;
+  width: 100%; padding: 12px 14px; border: 1.5px solid #d4ede3;
+  border-radius: 10px; font-size: 14px; color: #333;
+  transition: all 0.25s ease; background: #f9fdf7;
 }
-.form-item input:focus { outline: none; border-color: #38ef7d; box-shadow: 0 0 0 3px rgba(56,239,125,0.1); }
-.form-item input:disabled { background: #eee; color: #999; }
+.form-item input:focus {
+  outline: none; border-color: #38ef7d;
+  box-shadow: 0 0 0 3px rgba(56,239,125,0.1);
+  background: #fff;
+}
+.form-item input:disabled { background: #f0f0f0; color: #999; cursor: not-allowed; }
 .btn-save {
-  width: 100%; padding: 12px; border: none; border-radius: 8px;
+  width: 100%; padding: 14px; border: none; border-radius: 10px;
   background: linear-gradient(135deg, #11998e, #0d7370);
   color: #fff; font-size: 15px; font-weight: 600; cursor: pointer;
-  margin-top: 6px;
+  margin-top: 10px; transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(17,153,142,0.25);
+  line-height: 1.4;
 }
-.btn-save:hover { opacity: 0.9; }
+.btn-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(17,153,142,0.35);
+}
 .btn-pwd {
-  width: 100%; padding: 12px; border: none; border-radius: 8px;
+  width: 100%; padding: 14px; border: none; border-radius: 10px;
   background: linear-gradient(135deg, #e6a23c, #d48806);
   color: #fff; font-size: 15px; font-weight: 600; cursor: pointer;
-  margin-top: 6px;
+  margin-top: 10px; transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(230,162,60,0.25);
+  line-height: 1.4;
 }
-.btn-pwd:hover { opacity: 0.9; }
+.btn-pwd:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(230,162,60,0.35);
+}
 .sys-card { margin-top: 0; }
-.sys-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.sys-item { padding: 10px 14px; background: #f0fdf6; border-radius: 8px; display: flex; flex-direction: column; gap: 2px; }
-.sys-label { font-size: 11px; color: #999; }
+.sys-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.sys-item {
+  padding: 14px 16px; background: #f0fdf6; border-radius: 10px;
+  display: flex; flex-direction: column; gap: 6px;
+  transition: all 0.2s ease;
+}
+.sys-item:hover { background: #e8f5e9; }
+.sys-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; }
+
+@media (max-width: 768px) {
+  .settings-page { max-width: 100%; }
+  .settings-row { flex-direction: column; }
+  .sys-grid { grid-template-columns: 1fr; }
+}
 </style>

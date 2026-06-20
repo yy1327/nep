@@ -218,7 +218,7 @@ export default {
   flex: 1;
   background: linear-gradient(160deg, #1a3a5c 0%, #152b4a 50%, #1e3d5c 100%);
   position: relative;
-  padding: 50px 36px;
+  padding: 54px 40px;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -255,22 +255,25 @@ export default {
   font-size: 22px; font-weight: 700;
   color: #dbeafe;
   letter-spacing: 2px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  line-height: 1.4;
 }
 
 .brand-desc {
   font-size: 13px; color: #7a9ec8;
   letter-spacing: 1px;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
+  line-height: 1.5;
 }
 
 .brand-features {
-  display: flex; flex-direction: column; gap: 12px;
+  display: flex; flex-direction: column; gap: 14px;
 }
 
 .feature-item {
   font-size: 13px; color: #8aaaD0;
-  display: flex; align-items: center; gap: 10px;
+  display: flex; align-items: center; gap: 12px;
+  line-height: 1.5;
 }
 
 .feature-dot {
@@ -282,25 +285,26 @@ export default {
 
 .card-form {
   flex: 1;
-  padding: 50px 40px;
+  padding: 52px 44px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .form-header {
-  margin-bottom: 32px;
+  margin-bottom: 36px;
 }
 
 .form-header h2 {
   font-size: 22px; font-weight: 700;
   color: #dbeafe;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   letter-spacing: 2px;
 }
 
 .form-header p {
   font-size: 13px; color: #6b8db5;
+  line-height: 1.5;
 }
 
 .login-form {
@@ -308,16 +312,24 @@ export default {
 }
 
 :deep(.custom-input .el-input__wrapper) {
-  background: rgba(74, 144, 217, 0.06) !important;
+  background: rgba(74, 144, 217, 0.08) !important;
   border: 1.5px solid rgba(74, 144, 217, 0.2) !important;
   border-radius: 8px !important;
   box-shadow: none !important;
+  padding: 0 14px !important;
+}
+
+:deep(.custom-input .el-input__wrapper.is-focus) {
+  border-color: #81C784 !important;
+  box-shadow: 0 0 0 3px rgba(129, 199, 132, 0.1) !important;
 }
 
 :deep(.custom-input .el-input__inner) {
   color: #dbeafe !important;
   height: 46px !important;
   font-size: 14px !important;
+  line-height: 46px !important;
+  background: transparent !important;
 }
 
 :deep(.custom-input .el-input__inner::placeholder) {
@@ -326,24 +338,22 @@ export default {
 
 :deep(.custom-input .el-input__prefix) {
   color: #81C784 !important;
-}
-
-:deep(.custom-input .el-input__wrapper:focus-within) {
-  border-color: #81C784 !important;
-  box-shadow: 0 0 0 3px rgba(129, 199, 132, 0.1) !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
 .submit-btn {
   width: 100% !important;
-  height: 48px !important;
+  height: 50px !important;
   border-radius: 8px !important;
   font-size: 16px !important;
   font-weight: 600 !important;
   letter-spacing: 4px !important;
-  margin-top: 8px !important;
+  margin-top: 10px !important;
   background: linear-gradient(135deg, #2E7D32, #1B5E20) !important;
   border: none !important;
   transition: all 0.3s !important;
+  line-height: 1.4;
 }
 
 .submit-btn:hover {
@@ -363,12 +373,14 @@ export default {
   font-size: 12px;
   letter-spacing: 1px;
   z-index: 1;
+  line-height: 1.5;
 }
 
 @media (max-width: 860px) {
   .admin-login-card {
     width: 92%;
     flex-direction: column;
+    min-height: auto;
   }
   .card-brand {
     padding: 30px 24px;
@@ -379,5 +391,12 @@ export default {
   .card-form {
     padding: 30px 28px;
   }
+  .admin-footer { position: relative; margin-top: 20px; }
+}
+@media (max-width: 480px) {
+  .admin-login-card { width: 96%; border-radius: 12px; }
+  .brand-title { font-size: 18px; }
+  .form-header h2 { font-size: 18px; }
+  .submit-btn { height: 44px !important; font-size: 15px !important; letter-spacing: 2px !important; }
 }
 </style>

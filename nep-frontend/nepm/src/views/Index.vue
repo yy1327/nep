@@ -107,25 +107,28 @@ export default {
 .admin-layout { height: 100vh; }
 
 .admin-sidebar {
-  background: linear-gradient(180deg, #0f1e38 0%, #132241 100%) !important;
+  background: linear-gradient(180deg, #0a1628 0%, #0f1e38 40%, #132241 100%) !important;
   overflow: hidden;
+  box-shadow: 4px 0 20px rgba(0,0,0,0.15);
 }
 
 .sidebar-header {
-  padding: 20px 16px;
+  padding: 24px 16px 20px;
   text-align: center;
-  border-bottom: 1px solid rgba(74, 144, 217, 0.1);
+  border-bottom: 1px solid rgba(74, 144, 217, 0.08);
+  background: rgba(0,0,0,0.1);
 }
 
 .sidebar-logo {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   margin: 0 auto 12px;
-  background: linear-gradient(135deg, #2E7D32, #81C784);
-  border-radius: 12px;
+  background: linear-gradient(135deg, #2E7D32, #66bb6a);
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
 }
 
 .sidebar-logo svg {
@@ -136,12 +139,15 @@ export default {
 
 .sidebar-brand h3 {
   font-size: 15px; color: #dbeafe; margin: 0;
-  font-weight: 600; letter-spacing: 1px;
+  font-weight: 700; letter-spacing: 1.5px;
+  line-height: 1.4;
 }
 
 .sidebar-brand span {
-  font-size: 11px; color: #4a6580;
+  font-size: 10px; color: #4a6580;
   letter-spacing: 2px;
+  line-height: 1.4;
+  display: block; margin-top: 4px;
 }
 
 .admin-menu { border-right: none !important; }
@@ -150,6 +156,7 @@ export default {
 :deep(.el-sub-menu__title) {
   height: 48px; line-height: 48px;
   font-size: 14px;
+  letter-spacing: 0.3px;
 }
 
 :deep(.el-menu-item:hover),
@@ -173,18 +180,21 @@ export default {
 .admin-header {
   background: linear-gradient(135deg, #1a3a5c, #132241);
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 24px; height: 56px !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 0 28px; height: 56px !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
 }
 
 .header-left { display: flex; align-items: center; gap: 6px; }
-.header-greeting { color: #8aaaD0; font-size: 13px; }
-.header-admin-name { color: #dbeafe; font-size: 15px; font-weight: 600; }
+.header-greeting { color: #8aaaD0; font-size: 13px; line-height: 1.5; }
+.header-admin-name { color: #dbeafe; font-size: 15px; font-weight: 700; line-height: 1.5; }
 .header-right { display: flex; align-items: center; gap: 16px; }
-.header-time { color: #8aaaD0; font-size: 13px; }
+.header-time {
+  color: #58D9F9; font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
 
 .admin-content {
-  padding: 20px;
+  padding: 24px;
   background: #f0f4f8;
   min-height: calc(100vh - 56px);
 }
