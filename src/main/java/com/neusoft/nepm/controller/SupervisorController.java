@@ -24,8 +24,13 @@ public class SupervisorController {
 
     @PostMapping("/saveSupervisor")
     public Result<Void> saveSupervisor(@RequestBody Supervisor supervisor) {
-        supervisorService.saveSupervisor(supervisor);
-        return Result.success();
+        try {
+            supervisorService.saveSupervisor(supervisor);
+            return Result.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error("注册失败: " + e.getMessage());
+        }
     }
 
     @PostMapping("/getSupervisorByIdByPass")

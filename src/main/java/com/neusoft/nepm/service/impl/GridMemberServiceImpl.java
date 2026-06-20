@@ -28,4 +28,23 @@ public class GridMemberServiceImpl extends ServiceImpl<GridMemberMapper, GridMem
                .eq(GridMember::getGmPwd, gmPwd);
         return getOne(wrapper, false);
     }
+
+    @Override
+    public void updateProfile(GridMember member) {
+        GridMember existing = getById(member.getGmId());
+        if (existing != null) {
+            existing.setGmName(member.getGmName());
+            existing.setGmTel(member.getGmTel());
+            updateById(existing);
+        }
+    }
+
+    @Override
+    public void updatePassword(Integer gmId, String oldPwd, String newPwd) {
+        GridMember existing = getById(gmId);
+        if (existing == null) throw new RuntimeException("网格员不存在");
+        if (!existing.getGmPwd().equals(oldPwd)) throw new RuntimeException("原密码错误");
+        existing.setGmPwd(newPwd);
+        updateById(existing);
+    }
 }

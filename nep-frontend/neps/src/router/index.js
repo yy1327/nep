@@ -34,7 +34,7 @@ const routes = [
     name: "SelectGrid",
     component: SelectGrid,
     meta: {
-      title: "选择地区",
+      title: "环保公众监督",
     },
   },
   {

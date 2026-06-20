@@ -11,6 +11,7 @@ import ProvinceItemTotalStatis from "../views/statistics/ProvinceItemTotalStatis
 import AqiDistributeTotalStatis from "../views/statistics/AqiDistributeTotalStatis.vue";
 import AqiTrendTotalStatis from "../views/statistics/AqiTrendTotalStatis.vue";
 import OtherTotalStatis from "../views/statistics/OtherTotalStatis.vue";
+import AdminSettings from "../views/AdminSettings.vue";
 
 Vue.use(VueRouter);
 
@@ -105,6 +106,14 @@ const routes = [
         component: OtherTotalStatis,
         meta: {
           title: "其它统计",
+        },
+      },
+      {
+        path: "adminSettings",
+        name: "AdminSettings",
+        component: AdminSettings,
+        meta: {
+          title: "管理员设置",
         },
       },
     ],

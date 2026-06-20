@@ -7,7 +7,7 @@ Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
   const gridMember = sessionStorage.getItem("gridMember");
-  if (["/feedbackList", "/feedbackInfo"].includes(to.path)) {
+  if (to.path.startsWith("/index") && to.path !== "/login") {
     if (!gridMember) {
       return next("/login");
     }

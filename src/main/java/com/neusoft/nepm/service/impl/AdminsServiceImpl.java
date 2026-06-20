@@ -17,4 +17,27 @@ public class AdminsServiceImpl extends ServiceImpl<AdminsMapper, Admins> impleme
                .eq(Admins::getAdminPwd, adminPwd);
         return getOne(wrapper, false);
     }
+
+    @Override
+    public void updateAdminProfile(Admins admin) {
+        Admins existing = getById(admin.getAdminId());
+        if (existing != null) {
+            existing.setAdminName(admin.getAdminName());
+            existing.setAdminTel(admin.getAdminTel());
+            updateById(existing);
+        }
+    }
+
+    @Override
+    public void updateAdminPassword(Integer adminId, String oldPwd, String newPwd) {
+        Admins existing = getById(adminId);
+        if (existing == null) {
+            throw new RuntimeException("管理员不存在");
+        }
+        if (!existing.getAdminPwd().equals(oldPwd)) {
+            throw new RuntimeException("原密码错误");
+        }
+        existing.setAdminPwd(newPwd);
+        updateById(existing);
+    }
 }

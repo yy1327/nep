@@ -31,4 +31,27 @@ public class GridMemberController {
         }
         return Result.error("工号或密码错误");
     }
+
+    @PostMapping("/updateProfile")
+    public Result<Void> updateProfile(@RequestBody GridMember member) {
+        try {
+            gridMemberService.updateProfile(member);
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
+    }
+
+    @PostMapping("/updatePassword")
+    public Result<Void> updatePassword(@RequestBody Map<String, Object> params) {
+        try {
+            Integer gmId = (Integer) params.get("gmId");
+            String oldPwd = (String) params.get("oldPwd");
+            String newPwd = (String) params.get("newPwd");
+            gridMemberService.updatePassword(gmId, oldPwd, newPwd);
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
+    }
 }
