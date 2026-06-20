@@ -1,16 +1,18 @@
 <template>
   <div class="statistics-info">
     <el-card>
-      <div slot="header">
-        <span>统计详情</span>
-        <el-button style="float: right" @click="goBack">返回</el-button>
-      </div>
+      <template #header>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span>统计详情</span>
+          <el-button @click="goBack">返回</el-button>
+        </div>
+      </template>
       <el-descriptions :column="2" border>
         <el-descriptions-item label="统计ID">{{
           detail.statisticsId
         }}</el-descriptions-item>
         <el-descriptions-item label="AQI值">{{
-          detail.aqiBalue
+          detail.aqiValue
         }}</el-descriptions-item>
         <el-descriptions-item label="AQI等级">{{
           detail.aqiLevel

@@ -31,29 +31,28 @@ nep/
 ### 1. 启动后端
 
 ```bash
-cd nepmserver
 mvn spring-boot:run
 ```
 
-后端启动后运行在 `http://localhost:8080`
+后端启动后运行在 `http://localhost:8080/nepm`
 
 ### 2. 启动前端（分别在 4 个终端中执行）
 
 ```bash
 # 公众监督员端
-cd neps
+cd nep-frontend/neps
 npm run dev
 
 # 管理员端
-cd nepm
+cd nep-frontend/nepm
 npm run dev
 
 # 网格员端
-cd nepg
+cd nep-frontend/nepg
 npm run dev
 
 # 可视化大屏
-cd nepv
+cd nep-frontend/nepv
 npm run dev
 ```
 
@@ -81,11 +80,13 @@ npm run dev
 
 ### 公众监督员
 
-| 账号 | 密码 | 姓名 | 城市 |
-|------|------|------|------|
+| 监督员ID | 密码 | 姓名 | 城市 |
+|----------|------|------|------|
 | `SP001` | `123456` | 张三 | 北京市 |
 | `SP002` | `123456` | 李四 | 上海市 |
 | `SP003` | `123456` | 王五 | 广州市 |
+
+> 登录时可使用监督员ID（如 SP001）或手机号登录。
 
 ### 空气质量监测网格员
 
@@ -113,18 +114,40 @@ npm run dev
 
 ## 后端 API 接口
 
+所有接口前缀为 `/nepm`，例如管理员登录完整路径为 `http://localhost:8080/nepm/admins/getAdminsByCode`。
+
 | 模块 | 接口 | 说明 |
 |------|------|------|
-| 管理员 | `POST /api/admins/login` | 管理员登录 |
-| 监督员 | `POST /api/supervisor/login` | 监督员登录 |
-| 监督员 | `POST /api/supervisor/register` | 监督员注册 |
-| 网格员 | `POST /api/grid-member/login` | 网格员登录 |
-| 反馈 | `POST /api/aqi-feedback/submit` | 提交反馈 |
-| 反馈 | `GET /api/aqi-feedback/list` | 查询反馈列表 |
-| 反馈 | `PUT /api/aqi-feedback/assign` | 指派网格员 |
-| 反馈 | `PUT /api/aqi-feedback/confirm` | 网格员确认 |
-| 统计 | `GET /api/statistics/list` | 查询统计数据 |
-| AQI | `GET /api/aqi/list` | 查询 AQI 等级 |
+| 管理员 | `POST /admins/getAdminsByCode` | 管理员登录 |
+| 管理员 | `POST /admins/updateProfile` | 更新管理员信息 |
+| 管理员 | `POST /admins/updatePassword` | 修改管理员密码 |
+| 监督员 | `POST /supervisor/getSupervisorByIdByPass` | 监督员登录（支持手机号或监督员ID） |
+| 监督员 | `POST /supervisor/getSupervisorById` | 查询监督员信息 |
+| 监督员 | `POST /supervisor/saveSupervisor` | 监督员注册 |
+| 网格员 | `POST /gridMember/getGridMemberByCodeByPass` | 网格员登录 |
+| 网格员 | `POST /gridMember/listGridMemberByProvinceId` | 按省份查询网格员 |
+| 网格员 | `POST /gridMember/updateProfile` | 更新网格员信息 |
+| 网格员 | `POST /gridMember/updatePassword` | 修改网格员密码 |
+| 反馈 | `POST /aqiFeedback/saveAqiFeedback` | 提交反馈 |
+| 反馈 | `POST /aqiFeedback/listAqiFeedbackByTelId` | 按监督员查询反馈 |
+| 反馈 | `POST /aqiFeedback/listAqiFeedbackPage` | 分页查询反馈列表（管理员） |
+| 反馈 | `POST /aqiFeedback/getAqiFeedbackById` | 查询反馈详情 |
+| 反馈 | `POST /aqiFeedback/updateAqiFeedbackAssign` | 指派网格员 |
+| 反馈 | `POST /aqiFeedback/listAqiFeedbackByGmId` | 按网格员查询反馈 |
+| 反馈 | `POST /aqiFeedback/updateAqiFeedbackState` | 网格员确认/完成 |
+| 统计 | `POST /statistics/saveStatistics` | 提交检测数据 |
+| 统计 | `POST /statistics/listStatisticsPage` | 分页查询统计数据 |
+| 统计 | `POST /statistics/getStatisticsById` | 查询统计详情 |
+| 统计 | `GET /statistics/listProvinceItemTotalStatis` | 按省统计 |
+| 统计 | `GET /statistics/listAqiDistributeTotalStatis` | AQI等级分布 |
+| 统计 | `GET /statistics/listAqiTrendTotalStatis` | 月度趋势 |
+| 统计 | `GET /statistics/getAqiCount` | AQI采集总数 |
+| 统计 | `GET /statistics/getAqiGoodCount` | 优良记录数 |
+| 统计 | `GET /statistics/getProvinceCoverage` | 覆盖省份数 |
+| 统计 | `GET /statistics/getCityCoverage` | 覆盖城市数 |
+| 省市 | `POST /gridProvince/listGridProvinceAll` | 查询所有省份 |
+| 省市 | `POST /gridCity/listGridCityByProvinceId` | 按省份查询城市 |
+| AQI | `GET /aqi/listAqiAll` | 查询 AQI 等级列表 |
 
 完整 API 文档请查看各 Controller 源码。
 

@@ -1,21 +1,18 @@
-import Vue from "vue";
-import App from "./App.vue";
-import router from "./router";
-import "font-awesome/css/font-awesome.min.css";
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
 
-Vue.config.productionTip = false;
+const app = createApp(App)
 
 router.beforeEach((to, from, next) => {
-  const gridMember = sessionStorage.getItem("gridMember");
-  if (["/feedbackList", "/feedbackInfo"].includes(to.path)) {
+  const gridMember = sessionStorage.getItem('gridMember')
+  if (to.path.startsWith('/feedbackInfo') || to.path === '/feedbackList') {
     if (!gridMember) {
-      return next("/login");
+      return next('/login')
     }
   }
-  next();
-});
+  next()
+})
 
-new Vue({
-  router,
-  render: (h) => h(App),
-}).$mount("#app");
+app.use(router)
+app.mount('#app')

@@ -1,10 +1,12 @@
 <template>
   <div class="feedback-info">
     <el-card>
-      <div slot="header">
-        <span>反馈详情</span>
-        <el-button style="float: right" @click="goBack">返回</el-button>
-      </div>
+      <template #header>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span>反馈详情</span>
+          <el-button @click="goBack">返回</el-button>
+        </div>
+      </template>
       <el-descriptions :column="2" border>
         <el-descriptions-item label="反馈编号">{{ detail.af_code }}</el-descriptions-item>
         <el-descriptions-item label="状态">

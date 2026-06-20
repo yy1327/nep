@@ -20,6 +20,14 @@ public class SupervisorServiceImpl extends ServiceImpl<SupervisorMapper, Supervi
 
     @Override
     public void saveSupervisor(Supervisor supervisor) {
+        supervisor.setSupervisorId(supervisor.getSupervisorTel());
+        if (supervisor.getProvinceId() == null) {
+            supervisor.setProvinceId(0);
+        }
+        if (supervisor.getCityId() == null) {
+            supervisor.setCityId(0);
+        }
+        supervisor.setCreateTime(new java.util.Date());
         save(supervisor);
     }
 

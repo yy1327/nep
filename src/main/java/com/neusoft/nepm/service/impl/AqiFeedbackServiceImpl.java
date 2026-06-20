@@ -134,6 +134,9 @@ public class AqiFeedbackServiceImpl extends ServiceImpl<AqiFeedbackMapper, AqiFe
                     map.put("af_state", item.getAfState());
                     map.put("af_address", item.getAfAddress());
                     map.put("af_desc", item.getAfDesc());
+                    map.put("af_confirm_aqi", item.getAfConfirmAqi());
+                    map.put("af_confirm_desc", item.getAfConfirmDesc());
+                    map.put("af_confirm_time", item.getAfConfirmTime());
                     map.put("create_time", item.getCreateTime());
                     return map;
                 })

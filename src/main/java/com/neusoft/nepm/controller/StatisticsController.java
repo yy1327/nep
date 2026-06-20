@@ -20,6 +20,27 @@ public class StatisticsController {
 
     @PostMapping("/saveStatistics")
     public Result<Void> saveStatistics(@RequestBody Statistics statistics) {
+        if (statistics.getAfId() == null) {
+            return Result.error("afId不能为空");
+        }
+        if (statistics.getPm25Value() != null && statistics.getPm25Value().doubleValue() < 0) {
+            return Result.error("PM2.5数值不能为负数");
+        }
+        if (statistics.getPm10Value() != null && statistics.getPm10Value().doubleValue() < 0) {
+            return Result.error("PM10数值不能为负数");
+        }
+        if (statistics.getSo2Value() != null && statistics.getSo2Value().doubleValue() < 0) {
+            return Result.error("SO2数值不能为负数");
+        }
+        if (statistics.getNo2Value() != null && statistics.getNo2Value().doubleValue() < 0) {
+            return Result.error("NO2数值不能为负数");
+        }
+        if (statistics.getCoValue() != null && statistics.getCoValue().doubleValue() < 0) {
+            return Result.error("CO数值不能为负数");
+        }
+        if (statistics.getO3Value() != null && statistics.getO3Value().doubleValue() < 0) {
+            return Result.error("O3数值不能为负数");
+        }
         statisticsService.saveStatistics(statistics);
         return Result.success();
     }
@@ -32,6 +53,9 @@ public class StatisticsController {
     @PostMapping("/getStatisticsById")
     public Result<Statistics> getStatisticsById(@RequestBody Map<String, Integer> params) {
         Integer id = params.get("statisticsId");
+        if (id == null) {
+            return Result.error("statisticsId不能为空");
+        }
         return Result.success(statisticsService.getStatisticsById(id));
     }
 

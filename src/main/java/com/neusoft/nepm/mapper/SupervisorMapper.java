@@ -11,6 +11,6 @@ public interface SupervisorMapper extends BaseMapper<Supervisor> {
     @Select("SELECT * FROM supervisor WHERE supervisor_tel = #{tel} LIMIT 1")
     Supervisor getSupervisorByTel(String tel);
 
-    @Select("SELECT * FROM supervisor WHERE supervisor_tel = #{tel} AND supervisor_pwd = #{pwd} LIMIT 1")
+    @Select("SELECT * FROM supervisor WHERE (supervisor_tel = #{tel} OR supervisor_id = #{tel}) AND supervisor_pwd = #{pwd} LIMIT 1")
     Supervisor getSupervisorByTelAndPwd(String tel, String pwd);
 }

@@ -1,12 +1,9 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Login from "../views/Login.vue";
-import Register from "../views/Register.vue";
-import SelectGrid from "../views/SelectGrid.vue";
-import SelectAqi from "../views/SelectAqi.vue";
-import FeedbackList from "../views/FeedbackList.vue";
-
-Vue.use(VueRouter);
+import { createRouter, createWebHashHistory } from "vue-router"
+import Login from "../views/Login.vue"
+import Register from "../views/Register.vue"
+import SelectGrid from "../views/SelectGrid.vue"
+import SelectAqi from "../views/SelectAqi.vue"
+import FeedbackList from "../views/FeedbackList.vue"
 
 const routes = [
   {
@@ -34,7 +31,7 @@ const routes = [
     name: "SelectGrid",
     component: SelectGrid,
     meta: {
-      title: "选择地区",
+      title: "环保公众监督",
     },
   },
   {
@@ -53,20 +50,20 @@ const routes = [
       title: "反馈列表",
     },
   },
-];
+]
 
-const router = new VueRouter({
-  mode: "history",
+const router = createRouter({
+  history: createWebHashHistory(),
   routes,
-});
+})
 
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
-    document.title = to.meta.title;
+    document.title = to.meta.title
   } else {
-    document.title = "默认标题"; // 设置一个默认标题
+    document.title = "环保公众监督系统"
   }
-  next();
-});
+  next()
+})
 
-export default router;
+export default router

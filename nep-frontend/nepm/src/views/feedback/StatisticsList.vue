@@ -42,7 +42,7 @@
         <el-table-column prop="pm10Value" label="PM10"></el-table-column>
         <el-table-column prop="statisticsDate" label="日期"></el-table-column>
         <el-table-column label="操作" width="100">
-          <template slot-scope="scope">
+          <template #default="scope">
             <el-button size="mini" @click="viewInfo(scope.row.statisticsId)"
               >详情</el-button
             >

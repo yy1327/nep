@@ -1,10 +1,12 @@
 <template>
   <div class="assign-feedback">
     <el-card>
-      <div slot="header">
-        <span>指派反馈</span>
-        <el-button style="float: right" @click="goBack">返回</el-button>
-      </div>
+      <template #header>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span>指派反馈</span>
+          <el-button @click="goBack">返回</el-button>
+        </div>
+      </template>
       <el-form :model="form" label-width="100px">
         <el-form-item label="省份">
           <!-- 修改点1: 省份改变时，加载城市列表，并清空已选的城市和网格员 -->

@@ -1,18 +1,15 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Login from "../views/Login.vue";
-import Index from "../views/Index.vue";
-import FeedbackList from "../views/feedback/FeedbackList.vue";
-import FeedbackInfo from "../views/feedback/FeedbackInfo.vue";
-import AssignFeedback from "../views/feedback/AssignFeedback.vue";
-import StatisticsList from "../views/feedback/StatisticsList.vue";
-import StatisticsInfo from "../views/feedback/StatisticsInfo.vue";
-import ProvinceItemTotalStatis from "../views/statistics/ProvinceItemTotalStatis.vue";
-import AqiDistributeTotalStatis from "../views/statistics/AqiDistributeTotalStatis.vue";
-import AqiTrendTotalStatis from "../views/statistics/AqiTrendTotalStatis.vue";
-import OtherTotalStatis from "../views/statistics/OtherTotalStatis.vue";
-
-Vue.use(VueRouter);
+import { createRouter, createWebHashHistory } from "vue-router"
+import Login from "../views/Login.vue"
+import Index from "../views/Index.vue"
+import FeedbackList from "../views/feedback/FeedbackList.vue"
+import FeedbackInfo from "../views/feedback/FeedbackInfo.vue"
+import AssignFeedback from "../views/feedback/AssignFeedback.vue"
+import StatisticsList from "../views/feedback/StatisticsList.vue"
+import StatisticsInfo from "../views/feedback/StatisticsInfo.vue"
+import ProvinceItemTotalStatis from "../views/statistics/ProvinceItemTotalStatis.vue"
+import AqiDistributeTotalStatis from "../views/statistics/AqiDistributeTotalStatis.vue"
+import AqiTrendTotalStatis from "../views/statistics/AqiTrendTotalStatis.vue"
+import OtherTotalStatis from "../views/statistics/OtherTotalStatis.vue"
 
 const routes = [
   {
@@ -23,7 +20,6 @@ const routes = [
     path: "/login",
     name: "Login",
     component: Login,
-    // 标签名设置为管理员登录
     meta: {
       title: "管理员登录",
     },
@@ -109,20 +105,20 @@ const routes = [
       },
     ],
   },
-];
+]
 
-const router = new VueRouter({
-  mode: "history",
+const router = createRouter({
+  history: createWebHashHistory(),
   routes,
-});
+})
 
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
-    document.title = to.meta.title;
+    document.title = to.meta.title
   } else {
-    document.title = "默认标题"; // 设置一个默认标题
+    document.title = "环保公众监督系统"
   }
-  next();
-});
+  next()
+})
 
-export default router;
+export default router

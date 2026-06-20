@@ -1,10 +1,10 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Login from "../views/Login.vue";
-import FeedbackList from "../views/FeedbackList.vue";
-import FeedbackInfo from "../views/FeedbackInfo.vue";
-
-Vue.use(VueRouter);
+import { createRouter, createWebHashHistory } from "vue-router"
+import Login from "../views/Login.vue"
+import Index from "../views/Index.vue"
+import FeedbackList from "../views/FeedbackList.vue"
+import FeedbackInfo from "../views/FeedbackInfo.vue"
+import CompletedHistory from "../views/CompletedHistory.vue"
+import GridSettings from "../views/GridSettings.vue"
 
 const routes = [
   {
@@ -15,37 +15,50 @@ const routes = [
     path: "/login",
     name: "Login",
     component: Login,
-    meta: { title: "网格员登录" }, // 1.添加 meta 标题
+    meta: { title: "网格员登录" },
   },
   {
-    path: "/feedbackList",
-    name: "FeedbackList",
-    component: FeedbackList,
-    meta: { title: "反馈列表" }, // 1.添加 meta 标题
+    path: "/index",
+    component: Index,
+    children: [
+      {
+        path: "tasks",
+        name: "Tasks",
+        component: FeedbackList,
+        meta: { title: "待检测任务" },
+      },
+      {
+        path: "detect/:id",
+        name: "Detect",
+        component: FeedbackInfo,
+        meta: { title: "录入检测数据" },
+      },
+      {
+        path: "history",
+        name: "History",
+        component: CompletedHistory,
+        meta: { title: "已完成记录" },
+      },
+      {
+        path: "settings",
+        name: "Settings",
+        component: GridSettings,
+        meta: { title: "个人设置" },
+      },
+    ],
   },
-  {
-    path: "/feedbackInfo/:id",
-    name: "FeedbackInfo",
-    component: FeedbackInfo,
-    meta: { title: "反馈详情" }, // 1.添加 meta 标题
-  },
-];
+]
 
-const router = new VueRouter({
-  mode: "history",
+const router = createRouter({
+  history: createWebHashHistory(),
   routes,
-});
+})
 
-// 2. 添加全局前置守卫，动态修改 document.title
 router.beforeEach((to, from, next) => {
-  // 如果路由配置了 meta.title，则使用它
   if (to.meta && to.meta.title) {
-    document.title = to.meta.title;
-  } else {
-    // 否则使用默认标题
-    document.title = "系统默认标题";
+    document.title = to.meta.title
   }
-  next();
-});
+  next()
+})
 
-export default router;
+export default router

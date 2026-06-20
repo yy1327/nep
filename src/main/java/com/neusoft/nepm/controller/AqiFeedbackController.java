@@ -20,6 +20,18 @@ public class AqiFeedbackController {
 
     @PostMapping("/saveAqiFeedback")
     public Result<Void> saveAqiFeedback(@RequestBody AqiFeedback feedback) {
+        if (feedback.getSupervisorId() == null || feedback.getSupervisorId().trim().isEmpty()) {
+            return Result.error("supervisorId不能为空");
+        }
+        if (feedback.getAfType() == null || feedback.getAfType().trim().isEmpty()) {
+            return Result.error("反馈类型不能为空");
+        }
+        if (feedback.getAfLevel() == null || feedback.getAfLevel().trim().isEmpty()) {
+            return Result.error("AQI等级不能为空");
+        }
+        if (feedback.getAfAddress() == null || feedback.getAfAddress().trim().isEmpty()) {
+            return Result.error("问题地址不能为空");
+        }
         aqiFeedbackService.saveFeedback(feedback);
         return Result.success();
     }
@@ -27,6 +39,9 @@ public class AqiFeedbackController {
     @PostMapping("/listAqiFeedbackByTelId")
     public Result<List<Map<String, Object>>> listAqiFeedbackByTelId(@RequestBody Map<String, String> params) {
         String telId = params.get("telId");
+        if (telId == null || telId.trim().isEmpty()) {
+            return Result.error("telId不能为空");
+        }
         return Result.success(aqiFeedbackService.listBySupervisorId(telId));
     }
 
@@ -85,15 +100,31 @@ public class AqiFeedbackController {
     @PostMapping("/listAqiFeedbackByGmId")
     public Result<List<Map<String, Object>>> listAqiFeedbackByGmId(@RequestBody Map<String, Integer> params) {
         Integer gmId = params.get("gmId");
+        if (gmId == null) {
+            return Result.error("gmId不能为空");
+        }
         return Result.success(aqiFeedbackService.listByGmId(gmId));
     }
 
     @PostMapping("/updateAqiFeedbackState")
     public Result<Void> updateAqiFeedbackState(@RequestBody Map<String, Object> params) {
-        Integer afId = (Integer) params.get("afId");
-        String state = (String) params.get("state");
-        Integer aqi = (Integer) params.get("aqi");
-        String desc = (String) params.get("desc");
+        Object afIdObj = params.get("afId");
+        if (afIdObj == null) {
+            return Result.error("afId不能为空");
+        }
+        Integer afId;
+        try {
+            if (afIdObj instanceof Integer) {
+                afId = (Integer) afIdObj;
+            } else {
+                afId = Integer.parseInt(afIdObj.toString());
+            }
+        } catch (NumberFormatException e) {
+            return Result.error("afId格式不正确");
+        }
+        String state = params.get("state") != null ? params.get("state").toString() : null;
+        Integer aqi = params.get("aqi") != null ? Integer.parseInt(params.get("aqi").toString()) : null;
+        String desc = params.get("desc") != null ? params.get("desc").toString() : null;
         aqiFeedbackService.updateState(afId, state, aqi, desc);
         return Result.success();
     }

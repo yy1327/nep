@@ -96,15 +96,32 @@ export default {
     },
     async handleRegister() {
       try {
-        const res = await api.post('/supervisor/saveSupervisor', this.form)
+        const data = {
+          supervisorTel: this.form.supervisorTel,
+          supervisorPwd: this.form.supervisorPwd,
+          supervisorName: this.form.supervisorName,
+          supervisorSex: this.form.supervisorSex,
+          supervisorAge: this.form.supervisorAge ? Number(this.form.supervisorAge) : null,
+          supervisorAddr: this.form.supervisorAddr,
+          provinceId: this.form.provinceId ? Number(this.form.provinceId) : null,
+          cityId: this.form.cityId ? Number(this.form.cityId) : null
+        }
+        const res = await api.post('/supervisor/saveSupervisor', data)
         if (res.code === 200) {
           alert('注册成功')
           this.$router.push('/login')
         } else {
-          alert(res.msg)
+          alert('注册失败: ' + res.msg)
         }
       } catch (error) {
-        alert('注册失败')
+        console.error('注册错误:', error)
+        if (error.response) {
+          alert('服务器错误: ' + error.response.status + ' - ' + (error.response.data && error.response.data.message || JSON.stringify(error.response.data)))
+        } else if (error.request) {
+          alert('无法连接到服务器，请确认后端已启动')
+        } else {
+          alert('请求失败: ' + error.message)
+        }
       }
     }
   }

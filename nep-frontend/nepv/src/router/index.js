@@ -1,8 +1,5 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Index from "../views/Index.vue";
-
-Vue.use(VueRouter);
+import { createRouter, createWebHashHistory } from "vue-router"
+import Index from "../views/Index.vue"
 
 const routes = [
   {
@@ -17,20 +14,20 @@ const routes = [
       title: "环境监测数据中心",
     },
   },
-];
+]
 
-const router = new VueRouter({
-  mode: "history",
+const router = createRouter({
+  history: createWebHashHistory(),
   routes,
-});
+})
 
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
-    document.title = to.meta.title;
+    document.title = to.meta.title
   } else {
-    document.title = "默认标题"; // 设置一个默认标题
+    document.title = "环保公众监督系统"
   }
-  next();
-});
+  next()
+})
 
-export default router;
+export default router
