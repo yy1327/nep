@@ -25,11 +25,11 @@
             <span class="code-cell">📋 {{ scope.row.af_code }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="监督员" width="150">
+        <el-table-column label="监督员" width="160">
           <template #default="scope">
             <div class="supervisor-cell">
               <span class="supervisor-icon">👤</span>
-              <span>{{ scope.row.supervisor_id }}</span>
+              <span>{{ scope.row.supervisor_name || scope.row.supervisor_tel || scope.row.supervisor_id }}</span>
             </div>
           </template>
         </el-table-column>

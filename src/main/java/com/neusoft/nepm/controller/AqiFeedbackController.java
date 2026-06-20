@@ -32,6 +32,12 @@ public class AqiFeedbackController {
         if (feedback.getAfAddress() == null || feedback.getAfAddress().trim().isEmpty()) {
             return Result.error("问题地址不能为空");
         }
+        if (feedback.getAfLongitude() != null && (feedback.getAfLongitude().doubleValue() < -180 || feedback.getAfLongitude().doubleValue() > 180)) {
+            return Result.error("经度范围 -180~180");
+        }
+        if (feedback.getAfLatitude() != null && (feedback.getAfLatitude().doubleValue() < -90 || feedback.getAfLatitude().doubleValue() > 90)) {
+            return Result.error("纬度范围 -90~90");
+        }
         aqiFeedbackService.saveFeedback(feedback);
         return Result.success();
     }

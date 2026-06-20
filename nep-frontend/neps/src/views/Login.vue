@@ -59,6 +59,7 @@
 
 <script>
 import api from '@/api'
+import { showToast } from '@/utils/toast'
 
 export default {
   name: 'Login',
@@ -78,10 +79,10 @@ export default {
           sessionStorage.setItem('supervisor', JSON.stringify(res.data))
           this.$router.push('/selectGrid')
         } else {
-          alert(res.msg)
+          showToast(res.msg, 'error')
         }
       } catch (error) {
-        alert('登录失败，请检查网络连接')
+        showToast('登录失败，请检查网络连接', 'error')
       }
     }
   }

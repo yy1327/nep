@@ -58,7 +58,15 @@ router.beforeEach((to, from, next) => {
   if (to.meta && to.meta.title) {
     document.title = to.meta.title
   }
-  next()
+  const isLogin = to.path === '/login'
+  const hasSession = !!sessionStorage.getItem('gridMember')
+  if (!isLogin && !hasSession) {
+    next('/login')
+  } else if (isLogin && hasSession) {
+    next('/index/tasks')
+  } else {
+    next()
+  }
 })
 
 export default router

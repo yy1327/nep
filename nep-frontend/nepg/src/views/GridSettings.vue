@@ -49,6 +49,7 @@
 
 <script>
 import api from '@/api'
+import { showToast } from '@/utils/toast'
 
 export default {
   name: 'GridSettings',
@@ -75,7 +76,7 @@ export default {
       try {
         const res = await api.post('/gridMember/updateProfile', this.profile)
         if (res.code === 200) {
-          alert('保存成功')
+          showToast('保存成功', 'success')
           const raw = sessionStorage.getItem('gridMember')
           if (raw) {
             const m = JSON.parse(raw)
@@ -83,22 +84,22 @@ export default {
             m.gmTel = this.profile.gmTel
             sessionStorage.setItem('gridMember', JSON.stringify(m))
           }
-        } else { alert(res.msg) }
-      } catch (e) { alert('保存失败') }
+        } else { showToast(res.msg, 'error') }
+      } catch (e) { showToast('保存失败', 'error') }
     },
     async changePassword() {
-      if (!this.pwd.oldPwd || !this.pwd.newPwd) { alert('请输入密码'); return }
-      if (this.pwd.newPwd !== this.pwd.confirmPwd) { alert('两次密码不一致'); return }
-      if (this.pwd.newPwd.length < 6) { alert('密码不能少于6位'); return }
+      if (!this.pwd.oldPwd || !this.pwd.newPwd) { showToast('请输入密码', 'warning'); return }
+      if (this.pwd.newPwd !== this.pwd.confirmPwd) { showToast('两次密码不一致', 'warning'); return }
+      if (this.pwd.newPwd.length < 6) { showToast('密码不能少于6位', 'warning'); return }
       try {
         const res = await api.post('/gridMember/updatePassword', {
           gmId: this.profile.gmId, oldPwd: this.pwd.oldPwd, newPwd: this.pwd.newPwd
         })
         if (res.code === 200) {
-          alert('密码修改成功')
+          showToast('密码修改成功', 'success')
           this.pwd = { oldPwd: '', newPwd: '', confirmPwd: '' }
-        } else { alert(res.msg) }
-      } catch (e) { alert('修改失败') }
+        } else { showToast(res.msg, 'error') }
+      } catch (e) { showToast('修改失败', 'error') }
     }
   }
 }

@@ -20,15 +20,21 @@ public class SupervisorServiceImpl extends ServiceImpl<SupervisorMapper, Supervi
 
     @Override
     public void saveSupervisor(Supervisor supervisor) {
-        supervisor.setSupervisorId(supervisor.getSupervisorTel());
-        if (supervisor.getProvinceId() == null) {
-            supervisor.setProvinceId(0);
-        }
-        if (supervisor.getCityId() == null) {
-            supervisor.setCityId(0);
-        }
+        supervisor.setSupervisorId(generateSupervisorId());
+        if (supervisor.getProvinceId() == null) supervisor.setProvinceId(0);
+        if (supervisor.getCityId() == null) supervisor.setCityId(0);
         supervisor.setCreateTime(new java.util.Date());
         save(supervisor);
+    }
+
+    private String generateSupervisorId() {
+        String latestId = supervisorMapper.getLatestSupervisorId();
+        if (latestId != null && latestId.startsWith("SP")) {
+            try {
+                return String.format("SP%04d", Integer.parseInt(latestId.substring(2)) + 1);
+            } catch (NumberFormatException e) {}
+        }
+        return "SP0001";
     }
 
     @Override

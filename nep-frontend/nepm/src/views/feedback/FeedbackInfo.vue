@@ -16,8 +16,9 @@
         <el-descriptions-item label="状态">
           <el-tag :type="getStatusType(detail.af_state)">{{ getStatusText(detail.af_state) }}</el-tag>
         </el-descriptions-item>
-        <el-descriptions-item label="监督员">{{ detail.supervisor_name }}</el-descriptions-item>
-        <el-descriptions-item label="联系电话">{{ detail.supervisor_tel }}</el-descriptions-item>
+        <el-descriptions-item label="监督员编号">{{ detail.supervisor_id }}</el-descriptions-item>
+        <el-descriptions-item label="监督员姓名">{{ detail.supervisor_name || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="联系电话">{{ detail.supervisor_tel || detail.supervisor_id }}</el-descriptions-item>
         <el-descriptions-item label="反馈类型">{{ getTypeText(detail.af_type) }}</el-descriptions-item>
         <el-descriptions-item label="预估等级">{{ detail.af_level }}</el-descriptions-item>
         <el-descriptions-item label="省份">{{ detail.province_name }}</el-descriptions-item>

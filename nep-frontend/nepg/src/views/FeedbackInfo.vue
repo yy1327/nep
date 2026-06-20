@@ -17,38 +17,40 @@
         <div class="form-row">
           <div class="form-item">
             <label>PM2.5 (μg/m³)</label>
-            <input type="number" step="0.01" v-model="form.pm25Value" placeholder="0.00" required />
+            <input type="number" step="0.01" min="0" max="1000" v-model="form.pm25Value" placeholder="0.00" required />
           </div>
           <div class="form-item">
             <label>PM10 (μg/m³)</label>
-            <input type="number" step="0.01" v-model="form.pm10Value" placeholder="0.00" required />
+            <input type="number" step="0.01" min="0" max="1000" v-model="form.pm10Value" placeholder="0.00" required />
           </div>
         </div>
         <div class="form-row">
           <div class="form-item">
             <label>SO₂ (μg/m³)</label>
-            <input type="number" step="0.01" v-model="form.so2Value" placeholder="0.00" required />
+            <input type="number" step="0.01" min="0" max="1000" v-model="form.so2Value" placeholder="0.00" required />
           </div>
           <div class="form-item">
             <label>NO₂ (μg/m³)</label>
-            <input type="number" step="0.01" v-model="form.no2Value" placeholder="0.00" required />
+            <input type="number" step="0.01" min="0" max="1000" v-model="form.no2Value" placeholder="0.00" required />
           </div>
         </div>
         <div class="form-row">
           <div class="form-item">
             <label>CO (mg/m³)</label>
-            <input type="number" step="0.01" v-model="form.coValue" placeholder="0.00" required />
+            <input type="number" step="0.01" min="0" max="50" v-model="form.coValue" placeholder="0.00" required />
           </div>
           <div class="form-item">
             <label>O₃ (μg/m³)</label>
-            <input type="number" step="0.01" v-model="form.o3Value" placeholder="0.00" required />
+            <input type="number" step="0.01" min="0" max="1000" v-model="form.o3Value" placeholder="0.00" required />
           </div>
         </div>
         <div class="form-item">
           <label>📝 检测备注</label>
           <textarea v-model="form.desc" rows="3" placeholder="请输入检测备注信息..."></textarea>
         </div>
-        <button type="submit" class="btn-submit">📤 提交检测数据</button>
+        <button type="submit" class="btn-submit" :disabled="submitting">
+          {{ submitting ? '提交中...' : '📤 提交检测数据' }}
+        </button>
       </form>
     </div>
   </div>
@@ -56,12 +58,14 @@
 
 <script>
 import api from "@/api"
+import { showToast } from "@/utils/toast"
 
 export default {
   name: "FeedbackInfo",
   data() {
     return {
       detail: {},
+      submitting: false,
       form: { pm25Value: "", pm10Value: "", so2Value: "", no2Value: "", coValue: "", o3Value: "", desc: "" },
       typeMap: { "01": "空气有异味", "02": "雾霾严重", "03": "工业排放", "04": "其他" }
     }
@@ -74,24 +78,51 @@ export default {
       if (res.code === 200) this.detail = res.data
     },
     async submitData() {
-      const gm = JSON.parse(sessionStorage.getItem("gridMember"))
-      const id = this.$route.params.id
-      const statistics = {
-        afId: parseInt(id), gmId: gm.gmId,
-        pm25Value: parseFloat(this.form.pm25Value), pm10Value: parseFloat(this.form.pm10Value),
-        so2Value: parseFloat(this.form.so2Value), no2Value: parseFloat(this.form.no2Value),
-        coValue: parseFloat(this.form.coValue), o3Value: parseFloat(this.form.o3Value),
-        provinceId: this.detail.af_province_id, cityId: this.detail.af_city_id
-      }
-      const statRes = await api.post("/statistics/saveStatistics", statistics)
-      if (statRes.code === 200) {
-        await api.post("/aqiFeedback/updateAqiFeedbackState", {
-          afId: parseInt(id), state: "03",
-          aqi: Math.round((statistics.pm25Value + statistics.pm10Value) / 2),
-          desc: this.form.desc
-        })
-        alert("检测数据提交成功！✅")
-        this.$router.push("/index/tasks")
+      if (this.submitting) return
+      const pm25 = parseFloat(this.form.pm25Value)
+      const pm10 = parseFloat(this.form.pm10Value)
+      const so2 = parseFloat(this.form.so2Value)
+      const no2 = parseFloat(this.form.no2Value)
+      const co = parseFloat(this.form.coValue)
+      const o3 = parseFloat(this.form.o3Value)
+      if (isNaN(pm25) || pm25 < 0 || pm25 > 1000) { showToast('PM2.5 范围 0~1000', 'warning'); return }
+      if (isNaN(pm10) || pm10 < 0 || pm10 > 1000) { showToast('PM10 范围 0~1000', 'warning'); return }
+      if (isNaN(so2) || so2 < 0 || so2 > 1000) { showToast('SO₂ 范围 0~1000', 'warning'); return }
+      if (isNaN(no2) || no2 < 0 || no2 > 1000) { showToast('NO₂ 范围 0~1000', 'warning'); return }
+      if (isNaN(co) || co < 0 || co > 50) { showToast('CO 范围 0~50', 'warning'); return }
+      if (isNaN(o3) || o3 < 0 || o3 > 1000) { showToast('O₃ 范围 0~1000', 'warning'); return }
+      this.submitting = true
+      try {
+        const gm = JSON.parse(sessionStorage.getItem("gridMember"))
+        const id = this.$route.params.id
+        const statistics = {
+          afId: parseInt(id), gmId: gm.gmId,
+          pm25Value: parseFloat(this.form.pm25Value), pm10Value: parseFloat(this.form.pm10Value),
+          so2Value: parseFloat(this.form.so2Value), no2Value: parseFloat(this.form.no2Value),
+          coValue: parseFloat(this.form.coValue), o3Value: parseFloat(this.form.o3Value),
+          provinceId: this.detail.af_province_id, cityId: this.detail.af_city_id
+        }
+        const statRes = await api.post("/statistics/saveStatistics", statistics)
+        if (statRes.code === 200) {
+          const stateRes = await api.post("/aqiFeedback/updateAqiFeedbackState", {
+            afId: parseInt(id), state: "03",
+            aqi: Math.round((statistics.pm25Value + statistics.pm10Value) / 2),
+            desc: this.form.desc
+          })
+          if (stateRes.code === 200) {
+            showToast("检测数据提交成功！", "success")
+            this.$router.push("/index/tasks")
+          } else {
+            showToast("数据已保存但状态更新失败：" + stateRes.msg, "warning")
+            this.$router.push("/index/tasks")
+          }
+        } else {
+          showToast("提交失败：" + statRes.msg, "error")
+        }
+      } catch (e) {
+        showToast("提交失败，请检查网络连接", "error")
+      } finally {
+        this.submitting = false
       }
     }
   }
@@ -164,6 +195,10 @@ h2 { font-size: 20px; color: #166953; margin-bottom: 20px; font-weight: 700; lin
   background: linear-gradient(135deg, #14b8a6, #11998e);
 }
 .btn-submit:active { transform: translateY(0); }
+.btn-submit:disabled {
+  opacity: 0.6; cursor: not-allowed; transform: none;
+  box-shadow: none;
+}
 
 @media (max-width: 768px) {
   .detect-page { max-width: 100%; }

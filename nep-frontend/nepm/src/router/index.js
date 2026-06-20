@@ -118,7 +118,15 @@ router.beforeEach((to, from, next) => {
   } else {
     document.title = "环保公众监督系统"
   }
-  next()
+  const isLogin = to.path === '/login'
+  const hasSession = !!sessionStorage.getItem('admin')
+  if (!isLogin && !hasSession) {
+    next('/login')
+  } else if (isLogin && hasSession) {
+    next('/index/feedbackList')
+  } else {
+    next()
+  }
 })
 
 export default router

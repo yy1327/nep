@@ -59,45 +59,34 @@ public class AqiFeedbackServiceImpl extends ServiceImpl<AqiFeedbackMapper, AqiFe
 
     @Override
     public PageResponseDto<Map<String, Object>> listPage(AfPageRequestDto dto) {
-        Page<AqiFeedback> page = new Page<>(dto.getPageNum(), dto.getPageSize());
-        LambdaQueryWrapper<AqiFeedback> wrapper = new LambdaQueryWrapper<>();
-
+        LambdaQueryWrapper<AqiFeedback> countWrapper = new LambdaQueryWrapper<>();
         if (dto.getAfCode() != null && !dto.getAfCode().isEmpty()) {
-            wrapper.like(AqiFeedback::getAfCode, dto.getAfCode());
+            countWrapper.like(AqiFeedback::getAfCode, dto.getAfCode());
         }
         if (dto.getAfState() != null && !dto.getAfState().isEmpty()) {
-            wrapper.eq(AqiFeedback::getAfState, dto.getAfState());
+            countWrapper.eq(AqiFeedback::getAfState, dto.getAfState());
         }
         if (dto.getSupervisorName() != null && !dto.getSupervisorName().isEmpty()) {
-            wrapper.like(AqiFeedback::getSupervisorId, dto.getSupervisorName());
+            countWrapper.like(AqiFeedback::getSupervisorId, dto.getSupervisorName());
         }
         if (dto.getAfAddress() != null && !dto.getAfAddress().isEmpty()) {
-            wrapper.like(AqiFeedback::getAfAddress, dto.getAfAddress());
+            countWrapper.like(AqiFeedback::getAfAddress, dto.getAfAddress());
         }
-        wrapper.orderByDesc(AqiFeedback::getCreateTime);
-        page = page(page, wrapper);
+        long total = count(countWrapper);
+
+        int offset = (dto.getPageNum() - 1) * dto.getPageSize();
+        String afCode = dto.getAfCode() != null ? dto.getAfCode() : "";
+        String afState = dto.getAfState() != null ? dto.getAfState() : "";
+        String supervisorName = dto.getSupervisorName() != null ? dto.getSupervisorName() : "";
+        String afAddress = dto.getAfAddress() != null ? dto.getAfAddress() : "";
+        List<Map<String, Object>> records = aqiFeedbackMapper.listPageWithJoin(
+                afCode, afState, supervisorName, afAddress, dto.getPageSize(), offset);
 
         PageResponseDto<Map<String, Object>> response = new PageResponseDto<>();
-        response.setTotal(page.getTotal());
+        response.setTotal(total);
         response.setPageNum(dto.getPageNum());
         response.setPageSize(dto.getPageSize());
-
-        List<Map<String, Object>> records = page.getRecords().stream()
-                .map(item -> {
-                    Map<String, Object> map = new java.util.HashMap<>();
-                    map.put("af_id", item.getAfId());
-                    map.put("af_code", item.getAfCode());
-                    map.put("af_type", item.getAfType());
-                    map.put("af_level", item.getAfLevel());
-                    map.put("af_state", item.getAfState());
-                    map.put("supervisor_id", item.getSupervisorId());
-                    map.put("af_address", item.getAfAddress());
-                    map.put("create_time", item.getCreateTime());
-                    return map;
-                })
-                .collect(java.util.stream.Collectors.toList());
         response.setRecords(records);
-
         return response;
     }
 

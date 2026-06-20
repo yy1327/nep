@@ -133,6 +133,10 @@ export default {
       }
     },
     async submitAssign() {
+      if (!this.form.gmId) {
+        this.$message.warning("请选择网格员");
+        return;
+      }
       const afId = this.$route.params.id;
       const res = await api.post("/aqiFeedback/updateAqiFeedbackAssign", {
         afId: parseInt(afId),

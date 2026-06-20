@@ -23,23 +23,23 @@ public class StatisticsController {
         if (statistics.getAfId() == null) {
             return Result.error("afId不能为空");
         }
-        if (statistics.getPm25Value() != null && statistics.getPm25Value().doubleValue() < 0) {
-            return Result.error("PM2.5数值不能为负数");
+        if (statistics.getPm25Value() != null && (statistics.getPm25Value().doubleValue() < 0 || statistics.getPm25Value().doubleValue() > 1000)) {
+            return Result.error("PM2.5 范围 0~1000");
         }
-        if (statistics.getPm10Value() != null && statistics.getPm10Value().doubleValue() < 0) {
-            return Result.error("PM10数值不能为负数");
+        if (statistics.getPm10Value() != null && (statistics.getPm10Value().doubleValue() < 0 || statistics.getPm10Value().doubleValue() > 1000)) {
+            return Result.error("PM10 范围 0~1000");
         }
-        if (statistics.getSo2Value() != null && statistics.getSo2Value().doubleValue() < 0) {
-            return Result.error("SO2数值不能为负数");
+        if (statistics.getSo2Value() != null && (statistics.getSo2Value().doubleValue() < 0 || statistics.getSo2Value().doubleValue() > 1000)) {
+            return Result.error("SO₂ 范围 0~1000");
         }
-        if (statistics.getNo2Value() != null && statistics.getNo2Value().doubleValue() < 0) {
-            return Result.error("NO2数值不能为负数");
+        if (statistics.getNo2Value() != null && (statistics.getNo2Value().doubleValue() < 0 || statistics.getNo2Value().doubleValue() > 1000)) {
+            return Result.error("NO₂ 范围 0~1000");
         }
-        if (statistics.getCoValue() != null && statistics.getCoValue().doubleValue() < 0) {
-            return Result.error("CO数值不能为负数");
+        if (statistics.getCoValue() != null && (statistics.getCoValue().doubleValue() < 0 || statistics.getCoValue().doubleValue() > 50)) {
+            return Result.error("CO 范围 0~50");
         }
-        if (statistics.getO3Value() != null && statistics.getO3Value().doubleValue() < 0) {
-            return Result.error("O3数值不能为负数");
+        if (statistics.getO3Value() != null && (statistics.getO3Value().doubleValue() < 0 || statistics.getO3Value().doubleValue() > 1000)) {
+            return Result.error("O₃ 范围 0~1000");
         }
         statisticsService.saveStatistics(statistics);
         return Result.success();

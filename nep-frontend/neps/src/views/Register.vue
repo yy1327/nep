@@ -55,6 +55,7 @@
 
 <script>
 import api from '@/api'
+import { showToast } from '@/utils/toast'
 
 export default {
   name: 'Register',
@@ -108,19 +109,19 @@ export default {
         }
         const res = await api.post('/supervisor/saveSupervisor', data)
         if (res.code === 200) {
-          alert('注册成功')
+          showToast('注册成功', 'success')
           this.$router.push('/login')
         } else {
-          alert('注册失败: ' + res.msg)
+          showToast('注册失败: ' + res.msg, 'error')
         }
       } catch (error) {
         console.error('注册错误:', error)
         if (error.response) {
-          alert('服务器错误: ' + error.response.status + ' - ' + (error.response.data && error.response.data.message || JSON.stringify(error.response.data)))
+          showToast('服务器错误: ' + error.response.status, 'error')
         } else if (error.request) {
-          alert('无法连接到服务器，请确认后端已启动')
+          showToast('无法连接到服务器，请确认后端已启动', 'error')
         } else {
-          alert('请求失败: ' + error.message)
+          showToast('请求失败: ' + error.message, 'error')
         }
       }
     }

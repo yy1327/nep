@@ -63,7 +63,15 @@ router.beforeEach((to, from, next) => {
   } else {
     document.title = "环保公众监督系统"
   }
-  next()
+  const publicPages = ['/login', '/register']
+  const hasSession = !!sessionStorage.getItem('supervisor')
+  if (!publicPages.includes(to.path) && !hasSession) {
+    next('/login')
+  } else if (publicPages.includes(to.path) && hasSession) {
+    next('/selectGrid')
+  } else {
+    next()
+  }
 })
 
 export default router

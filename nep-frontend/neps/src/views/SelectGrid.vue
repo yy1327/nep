@@ -108,11 +108,11 @@
             <div class="form-row">
               <div class="form-item flex-1">
                 <label>📐 经度</label>
-                <input v-model="feedback.afLongitude" type="number" step="0.000001" placeholder="经度坐标" />
+                <input v-model="feedback.afLongitude" type="number" step="0.00001" min="-180" max="180" placeholder="经度坐标" />
               </div>
               <div class="form-item flex-1">
                 <label>📐 纬度</label>
-                <input v-model="feedback.afLatitude" type="number" step="0.000001" placeholder="纬度坐标" />
+                <input v-model="feedback.afLatitude" type="number" step="0.00001" min="-90" max="90" placeholder="纬度坐标" />
               </div>
             </div>
             <button class="btn-primary" @click="submitFeedback">
@@ -238,6 +238,7 @@
 
 <script>
 import api from "@/api";
+import { showToast } from "@/utils/toast";
 
 export default {
   name: "SelectGrid",
@@ -335,19 +336,28 @@ export default {
       if (res.code === 200) this.aqiList = res.data;
     },
     goReportStep2() {
-      if (!this.provinceId || !this.cityId) { alert("请选择省份和城市"); return; }
+      if (!this.provinceId || !this.cityId) { showToast("请选择省份和城市", "warning"); return; }
       this.reportStep = 2;
     },
     async submitFeedback() {
+      if (!this.feedback.afType) { showToast("请选择反馈类型", "warning"); return; }
+      if (!this.feedback.afLevel) { showToast("请选择AQI等级", "warning"); return; }
+      if (!this.feedback.afAddress) { showToast("请输入问题地点", "warning"); return; }
+      if (this.feedback.afLongitude && (this.feedback.afLongitude < -180 || this.feedback.afLongitude > 180)) {
+        showToast("经度范围 -180~180", "warning"); return;
+      }
+      if (this.feedback.afLatitude && (this.feedback.afLatitude < -90 || this.feedback.afLatitude > 90)) {
+        showToast("纬度范围 -90~90", "warning"); return;
+      }
       const data = { ...this.feedback, supervisorId: this.userInfo.supervisorId, afProvinceId: this.provinceId, afCityId: this.cityId };
       try {
         const res = await api.post("/aqiFeedback/saveAqiFeedback", data);
         if (res.code === 200) {
-          alert("提交成功！感谢您为环境保护贡献力量 🌍");
+          showToast("提交成功！感谢您为环境保护贡献力量", "success");
           this.feedback = { afType: "", afLevel: "", afDesc: "", afAddress: "", afLongitude: "", afLatitude: "", occurTime: "" };
           this.reportStep = 1;
-        } else { alert("提交失败: " + res.msg); }
-      } catch (e) { alert("提交失败，请检查网络连接"); }
+        } else { showToast("提交失败: " + res.msg, "error"); }
+      } catch (e) { showToast("提交失败，请检查网络连接", "error"); }
     },
     async loadFeedbackList() {
       if (!this.userInfo.supervisorId) { this.loadUserInfo(); if (!this.userInfo.supervisorId) return; }
@@ -367,16 +377,16 @@ export default {
         };
         const res = await api.post("/supervisor/saveSupervisor", data);
         if (res.code === 200) {
-          alert("保存成功");
+          showToast("保存成功", "success");
           this.userInfo = { ...this.userInfo, ...data };
           sessionStorage.setItem("supervisor", JSON.stringify(this.userInfo));
-        } else { alert("保存失败: " + res.msg); }
-      } catch (e) { alert("保存失败，请检查网络连接"); }
+        } else { showToast("保存失败: " + res.msg, "error"); }
+      } catch (e) { showToast("保存失败，请检查网络连接", "error"); }
     },
     async changePassword() {
-      if (!this.password.newPwd || !this.password.confirmPwd) { alert("请输入新密码"); return; }
-      if (this.password.newPwd !== this.password.confirmPwd) { alert("两次输入的密码不一致"); return; }
-      if (this.password.newPwd.length < 6) { alert("密码不能少于6位"); return; }
+      if (!this.password.newPwd || !this.password.confirmPwd) { showToast("请输入新密码", "warning"); return; }
+      if (this.password.newPwd !== this.password.confirmPwd) { showToast("两次输入的密码不一致", "warning"); return; }
+      if (this.password.newPwd.length < 6) { showToast("密码不能少于6位", "warning"); return; }
       const newPwd = this.password.newPwd;
       try {
         const res = await api.post("/supervisor/saveSupervisor", {
@@ -391,13 +401,13 @@ export default {
         if (res.code === 200) {
           this.userInfo.supervisorPwd = newPwd;
           sessionStorage.setItem("supervisor", JSON.stringify(this.userInfo));
-          alert("密码修改成功");
+          showToast("密码修改成功", "success");
           this.password = { newPwd: "", confirmPwd: "" };
         } else {
-          alert("修改失败: " + res.msg);
+          showToast("修改失败: " + res.msg, "error");
         }
       } catch (e) {
-        alert("修改失败，请检查网络连接");
+        showToast("修改失败，请检查网络连接", "error");
       }
     },
   },
