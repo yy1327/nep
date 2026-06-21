@@ -68,8 +68,17 @@ export default {
       return this.tableData.reduce((sum, d) => sum + Number(d.count || 0), 0)
     }
   },
-  created() { this.loadData() },
-  beforeUnmount() { Object.values(this.charts).forEach(c => c && c.dispose()) },
+  mounted() {
+    this.loadData()
+    this._resizeHandler = () => {
+      Object.values(this.charts).forEach(c => c && c.resize())
+    }
+    window.addEventListener('resize', this._resizeHandler)
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this._resizeHandler)
+    Object.values(this.charts).forEach(c => c && c.dispose())
+  },
   methods: {
     getLevelColor(level) {
       const map = {
@@ -87,21 +96,21 @@ export default {
       const res = await api.get('/statistics/listAqiDistributeTotalStatis')
       if (res.code === 200) {
         this.tableData = res.data || []
-        this.$nextTick(() => {
-          this.renderPieChart()
-          this.renderBarChart()
-        })
+        this.renderPieChart()
+        this.renderBarChart()
       }
     },
     renderPieChart() {
-      if (this.charts.pie) this.charts.pie.dispose()
-      this.charts.pie = echarts.init(document.getElementById('aqiPieChart'))
+      if (!this.charts.pie) {
+        this.charts.pie = echarts.init(document.getElementById('aqiPieChart'))
+      }
       const data = this.tableData.filter(d => d.aqiLevel).map(d => ({
-        value: d.count,
+        value: Number(d.count) || 0,
         name: d.aqiLevel,
         itemStyle: { color: this.getLevelColor(d.aqiLevel) }
       }))
       this.charts.pie.setOption({
+        title: { text: data.length ? '' : '暂无数据', left: 'center', top: 'center', textStyle: { color: '#999', fontSize: 14 } },
         tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
         legend: { orient: 'vertical', right: 10, top: 'center', textStyle: { fontSize: 11 } },
         series: [{
@@ -116,10 +125,12 @@ export default {
       })
     },
     renderBarChart() {
-      if (this.charts.bar) this.charts.bar.dispose()
-      this.charts.bar = echarts.init(document.getElementById('aqiBarChart'))
+      if (!this.charts.bar) {
+        this.charts.bar = echarts.init(document.getElementById('aqiBarChart'))
+      }
       const sorted = [...this.tableData].filter(d => d.aqiLevel).sort((a, b) => b.count - a.count)
       this.charts.bar.setOption({
+        title: { text: sorted.length ? '' : '暂无数据', left: 'center', top: 'center', textStyle: { color: '#999', fontSize: 14 } },
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
         grid: { left: 80, right: 20, top: 20, bottom: 20 },
         xAxis: {
@@ -135,8 +146,9 @@ export default {
         },
         series: [{
           type: 'bar',
+          coordinateSystem: 'cartesian2d',
           data: sorted.map(d => ({
-            value: d.count,
+            value: Number(d.count) || 0,
             itemStyle: { color: this.getLevelColor(d.aqiLevel), borderRadius: [0, 4, 4, 0] }
           })).reverse(),
           barWidth: 18,

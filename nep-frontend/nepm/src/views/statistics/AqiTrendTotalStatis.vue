@@ -93,8 +93,15 @@ export default {
       ]
     }
   },
-  created() { this.loadData() },
-  beforeUnmount() { if (this.chart) this.chart.dispose() },
+  mounted() {
+    this.loadData()
+    this._resizeHandler = () => { if (this.chart) this.chart.resize() }
+    window.addEventListener('resize', this._resizeHandler)
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this._resizeHandler)
+    if (this.chart) this.chart.dispose()
+  },
   methods: {
     getAqiColor(val) {
       val = Number(val)
@@ -141,57 +148,72 @@ export default {
       const res = await api.get('/statistics/listAqiTrendTotalStatis')
       if (res.code === 200) {
         this.tableData = res.data || []
-        this.$nextTick(() => this.renderChart())
+        this.renderChart()
       }
     },
     renderChart() {
-      if (this.chart) this.chart.dispose()
-      this.chart = echarts.init(document.getElementById('trendLineChart'))
+      if (!this.chart) {
+        this.chart = echarts.init(document.getElementById('trendLineChart'))
+      }
+      if (!this.tableData.length) {
+        this.chart.setOption({
+          title: { text: '暂无数据', left: 'center', top: 'center', textStyle: { color: '#999', fontSize: 14 } },
+          tooltip: { trigger: 'axis' },
+          legend: { show: false },
+          xAxis: { type: 'category', data: [] },
+          yAxis: [{ type: 'value' }, { type: 'value' }],
+          series: []
+        })
+        return
+      }
       this.chart.setOption({
-        tooltip: { trigger: 'axis' },
-        legend: { data: ['监测次数', '平均AQI'], bottom: 0, textStyle: { color: '#999' } },
+        title: { text: '' },
+        tooltip: { trigger: 'axis', backgroundColor: 'rgba(255,255,255,0.96)', borderColor: '#e8e8e8', textStyle: { color: '#333' } },
+        legend: { show: true, data: ['监测次数', '平均AQI'], bottom: 0, textStyle: { color: '#999', fontSize: 11 } },
         grid: { left: 50, right: 50, top: 30, bottom: 40 },
         xAxis: {
           type: 'category',
-          data: this.tableData.map(d => d.month),
-          axisLabel: { color: '#666', rotate: 30 },
+          data: this.tableData.map(d => d.month || ''),
+          axisLabel: { color: '#666', fontSize: 11, rotate: 30 },
           axisLine: { lineStyle: { color: '#ddd' } }
         },
         yAxis: [
           {
             type: 'value', name: '次数',
-            nameTextStyle: { color: '#999' },
-            axisLabel: { color: '#999' },
-            splitLine: { lineStyle: { color: '#f5f5f5' } }
+            nameTextStyle: { color: '#999', fontSize: 11 },
+            axisLabel: { color: '#999', fontSize: 11 },
+            splitLine: { lineStyle: { color: '#f0f0f0' } }
           },
           {
             type: 'value', name: 'AQI',
-            nameTextStyle: { color: '#999' },
-            axisLabel: { color: '#999' },
+            nameTextStyle: { color: '#999', fontSize: 11 },
+            axisLabel: { color: '#999', fontSize: 11 },
             splitLine: { show: false }
           }
         ],
         series: [
           {
             name: '监测次数', type: 'line',
-            data: this.tableData.map(d => d.totalCount),
-            smooth: true, symbol: 'circle', symbolSize: 8,
-            lineStyle: { width: 3, color: '#409eff' },
-            itemStyle: { color: '#409eff' },
+            data: this.tableData.map(d => Number(d.totalCount) || 0),
+            smooth: true, symbol: 'circle', symbolSize: 6,
+            lineStyle: { width: 2.5, color: '#409EFF' },
+            itemStyle: { color: '#409EFF', borderWidth: 2 },
+            emphasis: { itemStyle: { borderColor: '#fff', borderWidth: 2 } },
             areaStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[
-              { offset: 0, color: 'rgba(64,158,255,0.25)' },
+              { offset: 0, color: 'rgba(64,158,255,0.3)' },
               { offset: 1, color: 'rgba(64,158,255,0.02)' }
             ])}
           },
           {
             name: '平均AQI', type: 'line', yAxisIndex: 1,
-            data: this.tableData.map(d => Number(d.avgAqi || 0).toFixed(1)),
-            smooth: true, symbol: 'diamond', symbolSize: 8,
-            lineStyle: { width: 3, color: '#f56c6c' },
-            itemStyle: { color: '#f56c6c' },
+            data: this.tableData.map(d => Number(d.avgAqi) || 0),
+            smooth: true, symbol: 'diamond', symbolSize: 6,
+            lineStyle: { width: 2.5, color: '#FF7E00' },
+            itemStyle: { color: '#FF7E00', borderWidth: 2 },
+            emphasis: { itemStyle: { borderColor: '#fff', borderWidth: 2 } },
             areaStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[
-              { offset: 0, color: 'rgba(245,108,108,0.2)' },
-              { offset: 1, color: 'rgba(245,108,108,0.02)' }
+              { offset: 0, color: 'rgba(255,126,0,0.2)' },
+              { offset: 1, color: 'rgba(255,126,0,0.02)' }
             ])}
           }
         ]

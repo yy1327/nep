@@ -32,7 +32,7 @@ public interface StatisticsMapper extends BaseMapper<Statistics> {
     @Select("SELECT COUNT(*) FROM statistics")
     Integer getAqiCount();
 
-    @Select("SELECT COUNT(*) FROM statistics WHERE aqi_level = '良'")
+    @Select("SELECT COUNT(*) FROM statistics WHERE aqi_level IN ('优','良')")
     Integer getAqiGoodCount();
 
     @Select("SELECT COUNT(DISTINCT province_id) FROM statistics")

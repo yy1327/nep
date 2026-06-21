@@ -39,7 +39,24 @@
 
     <!-- 图表 -->
     <el-card class="chart-card">
-      <template #header><span>📈 各省份数据对比</span></template>
+      <template #header>
+        <div class="chart-header">
+          <span>📈 各省份数据对比</span>
+          <div class="custom-legend">
+            <span
+              v-for="item in legendItems"
+              :key="item.name"
+              class="legend-btn"
+              :class="{ active: item.visible }"
+              :style="item.visible ? { color: item.color, borderColor: item.color } : {}"
+              @click="toggleSeries(item.name)"
+            >
+              <span class="legend-dot" :style="{ background: item.visible ? item.color : '#ccc' }"></span>
+              {{ item.name }}
+            </span>
+          </div>
+        </div>
+      </template>
       <div id="provinceBarChart" class="chart-box"></div>
     </el-card>
 
@@ -88,7 +105,16 @@ import * as echarts from 'echarts'
 export default {
   name: 'ProvinceItemTotalStatis',
   data() {
-    return { tableData: [], chart: null }
+    return {
+      tableData: [],
+      chart: null,
+      legendItems: [
+        { name: '优良数', color: '#67c23a', visible: true },
+        { name: '污染数', color: '#f56c6c', visible: true },
+        { name: '总数', color: '#409eff', visible: true }
+      ],
+      sortedData: []
+    }
   },
   computed: {
     sortedTableData() {
@@ -109,8 +135,15 @@ export default {
       return { total, good, polluted }
     }
   },
-  created() { this.loadData() },
-  beforeUnmount() { if (this.chart) this.chart.dispose() },
+  mounted() {
+    this.loadData()
+    this._resizeHandler = () => { if (this.chart) this.chart.resize() }
+    window.addEventListener('resize', this._resizeHandler)
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this._resizeHandler)
+    if (this.chart) this.chart.dispose()
+  },
   methods: {
     getRate(good, total) {
       if (!total || total === 0) return 0
@@ -125,17 +158,60 @@ export default {
       const res = await api.get('/statistics/listProvinceItemTotalStatis')
       if (res.code === 200) {
         this.tableData = res.data || []
-        this.$nextTick(() => this.renderChart())
+        this.sortedData = [...this.tableData]
+          .filter(d => d.province_name)
+          .sort((a, b) => b.total_count - a.total_count)
+        this.renderChart()
+      }
+    },
+    toggleSeries(name) {
+      const item = this.legendItems.find(l => l.name === name)
+      if (item) {
+        item.visible = !item.visible
+        this.updateChart()
       }
     },
     renderChart() {
-      if (this.chart) this.chart.dispose()
-      this.chart = echarts.init(document.getElementById('provinceBarChart'))
-      const sorted = [...this.tableData].sort((a, b) => b.total_count - a.total_count)
+      if (!this.chart) {
+        this.chart = echarts.init(document.getElementById('provinceBarChart'))
+      }
+      this.updateChart()
+    },
+    updateChart() {
+      const sorted = this.sortedData
+      if (!sorted.length) {
+        this.chart.setOption({
+          title: { text: '暂无数据', left: 'center', top: 'center', textStyle: { color: '#999', fontSize: 14 } },
+          tooltip: { trigger: 'axis' },
+          xAxis: { type: 'value' }, yAxis: { type: 'category', data: [] },
+          series: []
+        })
+        return
+      }
+      const seriesConfig = [
+        {
+          name: '优良数', type: 'bar',
+          data: this.legendItems[0].visible ? sorted.map(d => Number(d.good_count) || 0).reverse() : [],
+          barWidth: 12, barGap: '20%',
+          itemStyle: { color: '#67c23a', borderRadius: [0, 4, 4, 0] }
+        },
+        {
+          name: '污染数', type: 'bar',
+          data: this.legendItems[1].visible ? sorted.map(d => Number(d.polluted_count) || 0).reverse() : [],
+          barWidth: 12,
+          itemStyle: { color: '#f56c6c', borderRadius: [0, 4, 4, 0] }
+        },
+        {
+          name: '总数', type: 'bar',
+          data: this.legendItems[2].visible ? sorted.map(d => Number(d.total_count) || 0).reverse() : [],
+          barWidth: 12, barGap: '20%',
+          itemStyle: { color: '#409eff', borderRadius: [0, 4, 4, 0] }
+        }
+      ]
       this.chart.setOption({
+        title: { text: '' },
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-        legend: { data: ['优良数', '污染数', '总数'], top: 0, textStyle: { color: '#999' } },
-        grid: { left: 80, right: 40, top: 40, bottom: 20 },
+        grid: { left: 80, right: 40, top: 20, bottom: 20 },
         xAxis: {
           type: 'value',
           axisLabel: { color: '#999' },
@@ -148,26 +224,7 @@ export default {
           axisLine: { show: false },
           axisTick: { show: false }
         },
-        series: [
-          {
-            name: '优良数', type: 'bar',
-            data: sorted.map(d => d.good_count).reverse(),
-            barWidth: 12, barGap: '20%',
-            itemStyle: { color: '#67c23a', borderRadius: [0, 4, 4, 0] }
-          },
-          {
-            name: '污染数', type: 'bar',
-            data: sorted.map(d => d.polluted_count).reverse(),
-            barWidth: 12,
-            itemStyle: { color: '#f56c6c', borderRadius: [0, 4, 4, 0] }
-          },
-          {
-            name: '总数', type: 'bar',
-            data: sorted.map(d => d.total_count).reverse(),
-            barWidth: 12, barGap: '20%',
-            itemStyle: { color: '#409eff', borderRadius: [0, 4, 4, 0] }
-          }
-        ]
+        series: seriesConfig
       })
     }
   }
@@ -195,5 +252,16 @@ export default {
 .sc-val { font-size: 26px; font-weight: 700; color: #333; line-height: 1.2; }
 .sc-label { font-size: 12px; color: #999; margin-top: 4px; }
 .chart-card { margin-bottom: 16px; border-radius: 12px; }
+.chart-header { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 600; color: #333; }
 .chart-box { width: 100%; height: 420px; }
+.custom-legend { display: flex; gap: 8px; font-size: 13px; font-weight: 400; }
+.legend-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 12px; border-radius: 16px; cursor: pointer;
+  border: 1px solid #ddd; color: #999; transition: all 0.2s;
+  user-select: none;
+}
+.legend-btn:hover { border-color: #999; }
+.legend-btn.active { background: rgba(0,0,0,0.03); }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 </style>

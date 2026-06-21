@@ -93,8 +93,17 @@ export default {
       ]
     }
   },
-  created() { this.loadData() },
-  beforeUnmount() { Object.values(this.charts).forEach(c => c && c.dispose()) },
+  mounted() {
+    this.loadData()
+    this._resizeHandler = () => {
+      Object.values(this.charts).forEach(c => c && c.resize())
+    }
+    window.addEventListener('resize', this._resizeHandler)
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this._resizeHandler)
+    Object.values(this.charts).forEach(c => c && c.dispose())
+  },
   methods: {
     getGoodRate() {
       if (!this.stats.aqiCount) return 0
@@ -117,7 +126,7 @@ export default {
       if (goodRes.code === 200) this.stats.goodCount = goodRes.data
       if (provinceRes.code === 200) this.stats.provinceCoverage = provinceRes.data
       if (cityRes.code === 200) this.stats.cityCoverage = cityRes.data
-      this.$nextTick(() => this.renderGauges())
+      this.renderGauges()
     },
     renderGauges() {
       const goodRate = this.getGoodRate()
@@ -136,17 +145,23 @@ export default {
           axisLabel: { distance: 16, color: '#999', fontSize: 10 },
           title: { offsetCenter: [0, '80%'], fontSize: 13, color: '#666' },
           detail: { fontSize: 26, offsetCenter: [0, '52%'], formatter: '{value}%', color, fontWeight: 'bold' },
-          data: [{ value, name }]
+          data: [{ value: Number(value) || 0, name }]
         }]
       })
 
-      let g1 = echarts.init(document.getElementById('gaugeGoodRate'))
-      g1.setOption(gaugeOpt('优良率', goodRate, '#67c23a'))
-      this.charts.g1 = g1
+      if (!this.stats.aqiCount && !this.stats.provinceCoverage) {
+        return
+      }
 
-      let g2 = echarts.init(document.getElementById('gaugeProvince'))
-      g2.setOption(gaugeOpt('省份覆盖率', provinceRate, '#e6a23c'))
-      this.charts.g2 = g2
+      if (!this.charts.g1) {
+        this.charts.g1 = echarts.init(document.getElementById('gaugeGoodRate'))
+      }
+      this.charts.g1.setOption(gaugeOpt('优良率', goodRate, '#67c23a'))
+
+      if (!this.charts.g2) {
+        this.charts.g2 = echarts.init(document.getElementById('gaugeProvince'))
+      }
+      this.charts.g2.setOption(gaugeOpt('省份覆盖率', provinceRate, '#e6a23c'))
     }
   }
 }
